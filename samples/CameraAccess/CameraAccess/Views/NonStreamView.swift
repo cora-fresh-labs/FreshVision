@@ -20,6 +20,7 @@ struct NonStreamView: View {
   @ObservedObject var viewModel: StreamSessionViewModel
   @ObservedObject var wearablesVM: WearablesViewModel
   @State private var sheetHeight: CGFloat = 300
+  // FarmVPS removed — not yet implemented
 
   var body: some View {
     ZStack {
@@ -52,11 +53,11 @@ struct NonStreamView: View {
             .aspectRatio(contentMode: .fit)
             .frame(width: 120)
 
-          Text("Stream Your Glasses Camera")
+          Text("FreshVision QC Inspector")
             .font(.system(size: 20, weight: .semibold))
             .foregroundColor(.white)
 
-          Text("Tap the Start streaming button to stream video from your glasses or use the camera button to take a photo from your glasses.")
+          Text("Point your camera at fresh produce, labels, or QC equipment. Tap Inspect to get an instant AI quality assessment.")
             .font(.system(size: 15))
             .multilineTextAlignment(.center)
             .foregroundColor(.white)
@@ -79,6 +80,7 @@ struct NonStreamView: View {
         .padding(.bottom, 12)
         .opacity(viewModel.hasActiveDevice ? 0 : 1)
 
+        // Farm VPS button
         CustomButton(
           title: "Start on iPhone",
           style: .secondary,

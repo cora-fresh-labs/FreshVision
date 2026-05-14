@@ -1,225 +1,170 @@
-# VisionClaw 🦞+😎
+# FreshVision QC
 
-![VisionClaw](assets/teaserimage.png)
+![FreshVision](assets/teaserimage.png)
 
-A real-time AI assistant for Meta Ray-Ban smart glasses. See what you see, hear what you say, and take actions on your behalf -- all through voice.
+FreshVision is an open iOS prototype for real-time fresh-produce quality control using Meta Ray-Ban smart glasses or the iPhone camera.
+
+Point the camera at produce, cartons, PLU labels, thermometers, refractometers, or defect closeups. The app sends selected frames to Claude Vision and returns a structured QC assessment: commodity, visible label data, defect estimates, compliance flags, GREEN/AMBER/RED score, recommended action, and SOP coverage.
+
+This repo is meant to be a builder path, not a black-box SaaS pitch. If you have the will, a pair of camera glasses or an iPhone, and a Claude or Codex subscription to help you adapt the code, you can build and tailor a working QC layer yourself.
 
 ![Cover](assets/cover.png)
 
-Built on [Meta Wearables DAT SDK](https://github.com/facebook/meta-wearables-dat-ios) + [Gemini Live API](https://ai.google.dev/gemini-api/docs/live) + [OpenClaw](https://github.com/nichochar/openclaw) (optional).
+## What it does
 
-## What It Does
+- **Inspect produce in the field or warehouse** from smart glasses or the iPhone camera.
+- **Capture representative photos** hands-free, including via volume-button capture while streaming.
+- **Analyze with Claude Vision** using a produce-QC system prompt and JSON output schema.
+- **Read labels and QC instruments** when visible: origin, supplier, PLU, temperature, brix, weight.
+- **Score common defects** with estimated percentages and confidence.
+- **Track SOP coverage** across load overview, label, top-down fruit, defect closeup, cut fruit, temperature, brix, and weight photos.
+- **Finalize/share a report** with inspector notes, checklist items, selected photos, and the AI assessment.
 
-Put on your glasses, tap the AI button, and talk:
+## Why this exists
 
-- **"What am I looking at?"** -- Gemini sees through your glasses camera and describes the scene
-- **"Add milk to my shopping list"** -- delegates to OpenClaw, which adds it via your connected apps
-- **"Send a message to John saying I'll be late"** -- routes through OpenClaw to WhatsApp/Telegram/iMessage
-- **"Search for the best coffee shops nearby"** -- web search via OpenClaw, results spoken back
+Large retailers already run quality programs with human inspectors, cameras, spreadsheets, and SOPs. FreshVision shows how close a small builder can get to a practical assistive layer using commodity AI tools and wearable cameras.
 
-The glasses camera streams at ~1fps to Gemini for visual context, while audio flows bidirectionally in real-time.
+It is not a certified replacement for a trained inspector. It is a prototype for faster triage, better photo discipline, and more consistent first-pass documentation.
 
-## How It Works
+## How it works
 
 ![How It Works](assets/how.png)
 
-```
-Meta Ray-Ban Glasses (or iPhone camera)
-       |
-       | video frames + mic audio
-       v
-iOS App (this project)
-       |
-       | JPEG frames (~1fps) + PCM audio (16kHz)
-       v
-Gemini Live API (WebSocket)
-       |
-       |-- Audio response (PCM 24kHz) --> iOS App --> Speaker
-       |-- Tool calls (execute) -------> iOS App --> OpenClaw Gateway
-       |                                                  |
-       |                                                  v
-       |                                          56+ skills: web search,
-       |                                          messaging, smart home,
-       |                                          notes, reminders, etc.
-       |                                                  |
-       |<---- Tool response (text) <----- iOS App <-------+
-       |
-       v
-  Gemini speaks the result
+```text
+Meta Ray-Ban glasses or iPhone camera
+        |
+        | video frames / captured photos
+        v
+iOS app
+        |
+        | JPEG image + QC prompt
+        v
+Claude Vision API
+        |
+        | structured JSON assessment
+        v
+FreshVision UI + shareable report
 ```
 
-**Key pieces:**
-- **Gemini Live** -- real-time voice + vision AI over WebSocket (native audio, not STT-first)
-- **OpenClaw** (optional) -- local gateway that gives Gemini access to 56+ tools and all your connected apps
-- **iPhone mode** -- test the full pipeline using your iPhone camera instead of glasses
+Key pieces:
 
-## Quick Start
+- **Meta Wearables DAT SDK** for Ray-Ban Meta camera streaming.
+- **iPhone camera mode** so you can test without glasses.
+- **Claude Vision** for produce-QC image analysis.
+- **Local runtime API key entry** via the app UI; no API keys are committed to the repo.
+
+## Quick start
 
 ### 1. Clone and open
 
 ```bash
-git clone https://github.com/sseanliu/VisionClaw.git
-cd VisionClaw/samples/CameraAccess
+git clone https://github.com/cora-fresh-labs/FreshVision.git
+cd FreshVision/samples/CameraAccess
 open CameraAccess.xcodeproj
 ```
 
-### 2. Add your Gemini API key
+### 2. Get an Anthropic API key
 
-Get a free API key at [Google AI Studio](https://aistudio.google.com/apikey).
+Create an API key at <https://console.anthropic.com/>.
 
-Open `samples/CameraAccess/CameraAccess/Gemini/GeminiConfig.swift` and replace the placeholder:
-
-```swift
-static let apiKey = "YOUR_GEMINI_API_KEY"  // <-- paste your key here
-```
+The app stores the key locally in iOS `UserDefaults` after you enter it in the key-icon settings UI. Do **not** commit real API keys to source files.
 
 ### 3. Build and run
 
-Select your iPhone as the target device and hit Run (Cmd+R).
+- Xcode 15+
+- iOS 17+
+- Physical iPhone recommended
+- Meta Ray-Ban glasses optional
 
-### 4. Try it out
+Select your iPhone target and run with `Cmd+R`.
 
-**Without glasses (iPhone mode):**
-1. Tap **"Start on iPhone"** -- uses your iPhone's back camera
-2. Tap the **AI button** to start a Gemini Live session
-3. Talk to the AI -- it can see through your iPhone camera
+### 4. Try it without glasses
 
-**With Meta Ray-Ban glasses:**
+1. Tap **Start on iPhone**.
+2. Enter your Claude API key with the key icon if prompted.
+3. Point the camera at produce or a label.
+4. Tap **Inspect**.
+5. Review the JSON-backed QC card and share/finalize a report.
 
-First, enable Developer Mode in the Meta AI app:
+### 5. Try it with Meta Ray-Ban glasses
 
-1. Open the **Meta AI** app on your iPhone
-2. Go to **Settings** (gear icon, bottom left)
-3. Tap **App Info**
-4. Tap the **App version** number **5 times** -- this unlocks Developer Mode
-5. Go back to Settings -- you'll now see a **Developer Mode** toggle. Turn it on.
+First enable Developer Mode in the Meta AI app:
+
+1. Open the **Meta AI** app on your iPhone.
+2. Go to **Settings**.
+3. Tap **App Info**.
+4. Tap the **App version** number five times.
+5. Return to Settings and enable **Developer Mode**.
 
 ![How to enable Developer Mode](assets/dev_mode.png)
 
-Then in VisionClaw:
-1. Tap **"Start Streaming"** in the app
-2. Tap the **AI button** for voice + vision conversation
+Then in FreshVision:
 
-## Setup: OpenClaw (Optional)
+1. Pair the glasses through Meta AI.
+2. Tap **Start streaming**.
+3. Capture photos or inspect frames from the glasses stream.
 
-OpenClaw gives Gemini the ability to take real-world actions: send messages, search the web, manage lists, control smart home devices, and more. Without it, Gemini is voice + vision only.
+## Repository map
 
-### 1. Install and configure OpenClaw
-
-Follow the [OpenClaw setup guide](https://github.com/nichochar/openclaw). Make sure the gateway is enabled:
-
-In `~/.openclaw/openclaw.json`:
-
-```json
-{
-  "gateway": {
-    "port": 18789,
-    "bind": "lan",
-    "auth": {
-      "mode": "token",
-      "token": "your-gateway-token-here"
-    },
-    "http": {
-      "endpoints": {
-        "chatCompletions": { "enabled": true }
-      }
-    }
-  }
-}
+```text
+samples/CameraAccess/
+  CameraAccess.xcodeproj                 Xcode project
+  CameraAccess/
+    Claude/                              FreshVision QC analysis, report, UI models
+      ClaudeConfig.swift                 Runtime key storage + QC system prompt
+      ClaudeVisionService.swift          Anthropic Messages API image calls
+      FreshVisionViewModel.swift         inspection/session/report workflow
+      QCResult.swift                     Codable QC schema
+      QCResultCardView.swift             result card UI
+      ReportShareSheet.swift             iOS share sheet wrapper
+    iPhone/IPhoneCameraManager.swift     iPhone camera test mode
+    ViewModels/StreamSessionViewModel.swift
+    Views/StreamView.swift               FreshVision inspection UI
 ```
 
-Key settings:
-- `bind: "lan"` -- exposes the gateway on your local network so your iPhone can reach it
-- `chatCompletions.enabled: true` -- enables the `/v1/chat/completions` endpoint (off by default)
-- `auth.token` -- the token your iOS app will use to authenticate
+Legacy Gemini/OpenClaw files remain in the sample tree because this project started from a real-time assistant prototype, but the public FreshVision QC flow is Claude Vision based.
 
-### 2. Configure the iOS app
+## Optional bridge upload
 
-In `GeminiConfig.swift`, update the OpenClaw settings:
+Finalized reports can optionally be uploaded to a private bridge endpoint if you set both values in `UserDefaults`:
 
-```swift
-static let openClawHost = "http://Your-Mac.local"           // your Mac's Bonjour hostname
-static let openClawPort = 18789
-static let openClawGatewayToken = "your-gateway-token-here"  // must match gateway.auth.token
-```
+- `freshvision.bridge.endpoint`
+- `freshvision.bridge.token`
 
-To find your Mac's Bonjour hostname: **System Settings > General > Sharing** -- it's shown at the top (e.g., `Johns-MacBook-Pro.local`).
+No public endpoint or token is configured by default. If either value is missing, upload is skipped.
 
-### 3. Start the gateway
+## Security notes
 
-```bash
-openclaw gateway restart
-```
-
-Verify it's running:
-
-```bash
-curl http://localhost:18789/health
-```
-
-Now when you talk to the AI, it can execute tasks through OpenClaw.
-
-## Architecture
-
-### Key Files
-
-All source code is in `samples/CameraAccess/CameraAccess/`:
-
-| File | Purpose |
-|------|---------|
-| `Gemini/GeminiConfig.swift` | API keys, model config, system prompt |
-| `Gemini/GeminiLiveService.swift` | WebSocket client for Gemini Live API |
-| `Gemini/AudioManager.swift` | Mic capture (PCM 16kHz) + audio playback (PCM 24kHz) |
-| `Gemini/GeminiSessionViewModel.swift` | Session lifecycle, tool call wiring, transcript state |
-| `OpenClaw/ToolCallModels.swift` | Tool declarations, data types |
-| `OpenClaw/OpenClawBridge.swift` | HTTP client for OpenClaw gateway |
-| `OpenClaw/ToolCallRouter.swift` | Routes Gemini tool calls to OpenClaw |
-| `iPhone/IPhoneCameraManager.swift` | AVCaptureSession wrapper for iPhone camera mode |
-
-### Audio Pipeline
-
-- **Input**: iPhone mic -> AudioManager (PCM Int16, 16kHz mono, 100ms chunks) -> Gemini WebSocket
-- **Output**: Gemini WebSocket -> AudioManager playback queue -> iPhone speaker
-- **iPhone mode**: Uses `.voiceChat` audio session for echo cancellation + mic gating during AI speech
-- **Glasses mode**: Uses `.videoChat` audio session (mic is on glasses, speaker is on phone -- no echo)
-
-### Video Pipeline
-
-- **Glasses**: DAT SDK `videoFramePublisher` (24fps) -> throttle to ~1fps -> JPEG (50% quality) -> Gemini
-- **iPhone**: `AVCaptureSession` back camera (30fps) -> throttle to ~1fps -> JPEG -> Gemini
-
-### Tool Calling
-
-Gemini Live supports function calling. This app declares a single `execute` tool that routes everything through OpenClaw:
-
-1. User says "Add eggs to my shopping list"
-2. Gemini speaks "Sure, adding that now" (verbal acknowledgment before tool call)
-3. Gemini sends `toolCall` with `execute(task: "Add eggs to the shopping list")`
-4. `ToolCallRouter` sends HTTP POST to OpenClaw gateway
-5. OpenClaw executes the task using its 56+ connected skills
-6. Result returns to Gemini via `toolResponse`
-7. Gemini speaks the confirmation
+- No real API keys, bearer tokens, bridge tokens, or local hostnames should be committed.
+- Enter Anthropic keys at runtime only.
+- Treat photos of labels, cartons, suppliers, or warehouse operations as potentially sensitive.
+- This prototype sends selected images to Anthropic for analysis; review Anthropic’s data and retention terms before using real customer/supplier data.
 
 ## Requirements
 
-- iOS 17.0+
-- Xcode 15.0+
-- Gemini API key ([get one free](https://aistudio.google.com/apikey))
-- Meta Ray-Ban glasses (optional -- use iPhone mode for testing)
-- OpenClaw on your Mac (optional -- for agentic actions)
+- Xcode 15+
+- iOS 17+
+- Anthropic API key with vision-capable Claude model access
+- Physical iPhone
+- Meta Ray-Ban glasses for wearable mode, optional
 
 ## Troubleshooting
 
-**"Gemini API key not configured"** -- Open `GeminiConfig.swift` and add your API key.
+**Claude API key not configured**  
+Tap the key icon in the app and enter an Anthropic key. It should start with `sk-`.
 
-**OpenClaw connection timeout** -- Make sure your iPhone and Mac are on the same Wi-Fi network, the gateway is running (`openclaw gateway restart`), and the hostname in `GeminiConfig.swift` matches your Mac's Bonjour name.
+**Camera does not start**  
+Check iOS camera permissions and run on a physical device.
 
-**Echo/feedback in iPhone mode** -- The app mutes the mic while the AI is speaking. If you still hear echo, try turning down the volume.
+**Speech notes do not work**  
+Enable Speech Recognition and Microphone permissions in iOS Settings.
 
-**Gemini doesn't hear me** -- Check that microphone permission is granted. The app uses aggressive voice activity detection -- speak clearly and at normal volume.
+**Glasses do not connect**  
+Confirm Meta AI Developer Mode is enabled, the glasses are paired, and the DAT SDK setup is complete.
 
-For DAT SDK issues, see the [developer documentation](https://wearables.developer.meta.com/docs/develop/) or the [discussions forum](https://github.com/facebook/meta-wearables-dat-ios/discussions).
+**The assessment is wrong**  
+Treat the model output as a draft. Use the inspector checklist and notes before finalizing. For production use, calibrate prompts, tolerances, and validation against your own SOPs.
 
-## License
+## Status
 
-This source code is licensed under the license found in the [LICENSE](LICENSE) file in the root directory of this source tree.
+Prototype / public reference implementation. Contributions and forks are welcome, especially around commodity-specific SOPs, validation sets, and safer report export flows.

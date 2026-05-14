@@ -102,6 +102,7 @@
 		9D3C69602F367CF700E641A5 /* iPhone */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = iPhone; sourceTree = "<group>"; };
 		9D85EB992F35EC46006C44D1 /* OpenClaw */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); name = OpenClaw; path = CameraAccess/OpenClaw; sourceTree = SOURCE_ROOT; };
 		E699CC962E8150670052C240 /* CameraAccessTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = CameraAccessTests; sourceTree = "<group>"; };
+		F1A2B3C42F3A000100000001 /* Claude */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); name = Claude; path = CameraAccess/Claude; sourceTree = SOURCE_ROOT; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -177,6 +178,7 @@
 			children = (
 				9D3C69602F367CF700E641A5 /* iPhone */,
 				A1B2C3D42F0A000300000001 /* Gemini */,
+				F1A2B3C42F3A000100000001 /* Claude */,
 				8FD96B702E6F0A9800F56AB1 /* ViewModels */,
 				8FD96B762E6F0A9800F56AB1 /* Views */,
 				8FD96B772E6F0A9800F56AB1 /* Assets.xcassets */,
@@ -250,6 +252,7 @@
 			fileSystemSynchronizedGroups = (
 				9D3C69602F367CF700E641A5 /* iPhone */,
 				9D85EB992F35EC46006C44D1 /* OpenClaw */,
+				F1A2B3C42F3A000100000001 /* Claude */,
 			);
 			name = CameraAccess;
 			productName = CameraAccess;
