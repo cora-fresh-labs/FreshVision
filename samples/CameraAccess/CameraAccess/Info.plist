@@ -65,7 +65,9 @@
 	<key>NSCameraUsageDescription</key>
 	<string>This app uses the camera for iPhone testing mode, allowing you to test the AI assistant pipeline without glasses.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>This app uses the microphone to have voice conversations with the AI assistant while streaming from your glasses.</string>
+	<string>This app uses the microphone for voice dictation during QC inspections.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>This app uses speech recognition for hands-free voice input during produce quality inspections.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>This app needs access to save photos captured from your glasses.</string>
 	<key>NSAppTransportSecurity</key>

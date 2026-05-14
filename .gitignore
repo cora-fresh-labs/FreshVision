@@ -1,0 +1,17 @@
+# Xcode
+DerivedData/
+build/
+*.xcuserstate
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+
+# Local secrets / env
+.env
+.env.*
+*.local
+*.secret
+Secrets.plist
+Config.local.swift
+
+# macOS
+.DS_Store

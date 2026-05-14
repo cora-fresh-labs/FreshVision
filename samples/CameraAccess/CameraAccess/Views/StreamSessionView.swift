@@ -9,6 +9,8 @@
 //
 // StreamSessionView.swift
 //
+// FreshVision: Container view for streaming/non-streaming states.
+// Wires FreshVisionViewModel to StreamSessionViewModel for frame forwarding.
 //
 
 import MWDATCore
@@ -18,7 +20,7 @@ struct StreamSessionView: View {
   let wearables: WearablesInterface
   @ObservedObject private var wearablesViewModel: WearablesViewModel
   @StateObject private var viewModel: StreamSessionViewModel
-  @StateObject private var geminiVM = GeminiSessionViewModel()
+  @StateObject private var freshVisionVM = FreshVisionViewModel()
 
   init(wearables: WearablesInterface, wearablesVM: WearablesViewModel) {
     self.wearables = wearables
@@ -29,19 +31,13 @@ struct StreamSessionView: View {
   var body: some View {
     ZStack {
       if viewModel.isStreaming {
-        // Full-screen video view with streaming controls
-        StreamView(viewModel: viewModel, wearablesVM: wearablesViewModel, geminiVM: geminiVM)
+        StreamView(viewModel: viewModel, wearablesVM: wearablesViewModel, freshVisionVM: freshVisionVM)
       } else {
-        // Pre-streaming setup view with permissions and start button
         NonStreamView(viewModel: viewModel, wearablesVM: wearablesViewModel)
       }
     }
     .task {
-      viewModel.geminiSessionVM = geminiVM
-      geminiVM.streamingMode = viewModel.streamingMode
-    }
-    .onChange(of: viewModel.streamingMode) { newMode in
-      geminiVM.streamingMode = newMode
+      viewModel.freshVisionVM = freshVisionVM
     }
     .alert("Error", isPresented: $viewModel.showError) {
       Button("OK") {
