@@ -1,5 +1,7 @@
 # FreshVision QC
 
+> **FreshVision Consumer v1 is now a separate app target.** It opens straight into a shopper camera, supports five fruits, keeps scans and feedback locally before upload, and accepts capture from iPhone or Meta glasses through DAT 1.0. The packhouse QC prototype below remains parked and unchanged. Start with [the consumer runbook](docs/FRESHVISION-CONSUMER-RUNBOOK.md).
+
 ![FreshVision](assets/teaserimage.png)
 
 FreshVision is an open iOS prototype for real-time fresh-produce quality control using Meta Ray-Ban smart glasses or the iPhone camera.

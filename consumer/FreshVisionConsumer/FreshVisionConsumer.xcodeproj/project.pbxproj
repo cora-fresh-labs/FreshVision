@@ -1,0 +1,606 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		02C7346013B701329EA7CBA8 /* ResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F0FF03B9393E637D3FF307F /* ResultView.swift */; };
+		1D3B100337E1B9A796D14262 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 408B0CCD87FDC274E177DD58 /* Theme.swift */; };
+		2088091094FF03D3FF61598A /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C668CEB531FD05C1E573932 /* HistoryView.swift */; };
+		317E1817CF3149889B3940C0 /* GlassesSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 449438D872018DC5D1E1B470 /* GlassesSheet.swift */; };
+		3B1FDE1AC8B3F4434A9B4029 /* FreshVisionConsumerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 441894B86EB16717BCD1756F /* FreshVisionConsumerApp.swift */; };
+		4BDDF448CAB54D7B7DAE1D91 /* FruitModelsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CFF918854C6CCFE062551A5 /* FruitModelsTests.swift */; };
+		4C5F031FB393607E126EFD88 /* MWDATInputs in Frameworks */ = {isa = PBXBuildFile; productRef = D5C73EAEEEF6CA19D15B0A37 /* MWDATInputs */; };
+		4D5A4D0AD12D15A18102CBAA /* FruitModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84E9AB05565311A5D776B77A /* FruitModels.swift */; };
+		54F5B1B77FBE0E4A961D47E0 /* MetaRuntime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473E8D7968A7731E00DA59E7 /* MetaRuntime.swift */; };
+		5F5F12A4EA5F716AB78E1514 /* VerdictSpeaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC50364A9EB51FD9B884C31 /* VerdictSpeaker.swift */; };
+		6F4DF72D46DCD7D59E6FFD64 /* AppConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE42619655A096B694A8DC4 /* AppConfiguration.swift */; };
+		77D12F5E7C1ABD35C80AD9EC /* ImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712078B7EB8060A16AD3973D /* ImageStore.swift */; };
+		921507D876B274278A69105B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AC3E2DF2B5A3D80C4D094E93 /* Assets.xcassets */; };
+		A15224FC0155FCEAABBB1A10 /* IPhoneCameraSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE67CD20F668B68B8D26D056 /* IPhoneCameraSource.swift */; };
+		A21F2EAD2C9F69B3CD28027C /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E644345DC544E89C68855B53 /* RootView.swift */; };
+		A67422D32899F780564B4246 /* MetaGlassesSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D63C4B51757B9319AE0D2CD /* MetaGlassesSource.swift */; };
+		B983B7DC20C39FB6FD871F6A /* FreshVisionAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817757A9E7D8DDD16F7C1B97 /* FreshVisionAPI.swift */; };
+		BCB2BCB79741E9827DD96A12 /* MWDATCamera in Frameworks */ = {isa = PBXBuildFile; productRef = 0DF3F8C34348EA4BAD9E76F7 /* MWDATCamera */; };
+		BEB9814C1D0AE4C6669505AC /* MWDATCore in Frameworks */ = {isa = PBXBuildFile; productRef = 85DE071A91CBFC66B4B140F1 /* MWDATCore */; };
+		D898F888F8465ABEBA781064 /* ScanRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A06CC6816CF347011B4B18E /* ScanRecord.swift */; };
+		DBEB1875CE7085EC2521C595 /* DeviceIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78E5B0884CAEA09367AD943 /* DeviceIdentity.swift */; };
+		F656A85511EFDC6D85D4099D /* ScanController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AE41A4338FFD7D0A162CDA9 /* ScanController.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		AD9C2DA5AC7BAC977876D06F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 72C5124C35D48FEDCE645DBA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 44B1ACE36E8E63B20B0BBF30;
+			remoteInfo = FreshVisionConsumer;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		2C9365F6D8857AC7E1DE44E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		2D63C4B51757B9319AE0D2CD /* MetaGlassesSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaGlassesSource.swift; sourceTree = "<group>"; };
+		318685CB2BCE7FE70F19F8BA /* FreshVisionConsumer.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FreshVisionConsumer.entitlements; sourceTree = "<group>"; };
+		38CFD2DD79CBCB961FEA6BD8 /* FreshVisionConsumerTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = FreshVisionConsumerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3A06CC6816CF347011B4B18E /* ScanRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanRecord.swift; sourceTree = "<group>"; };
+		3CFF918854C6CCFE062551A5 /* FruitModelsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FruitModelsTests.swift; sourceTree = "<group>"; };
+		408B0CCD87FDC274E177DD58 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		441894B86EB16717BCD1756F /* FreshVisionConsumerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreshVisionConsumerApp.swift; sourceTree = "<group>"; };
+		449438D872018DC5D1E1B470 /* GlassesSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassesSheet.swift; sourceTree = "<group>"; };
+		473E8D7968A7731E00DA59E7 /* MetaRuntime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaRuntime.swift; sourceTree = "<group>"; };
+		4AE41A4338FFD7D0A162CDA9 /* ScanController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanController.swift; sourceTree = "<group>"; };
+		4F0FF03B9393E637D3FF307F /* ResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
+		712078B7EB8060A16AD3973D /* ImageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStore.swift; sourceTree = "<group>"; };
+		817757A9E7D8DDD16F7C1B97 /* FreshVisionAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreshVisionAPI.swift; sourceTree = "<group>"; };
+		84E9AB05565311A5D776B77A /* FruitModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FruitModels.swift; sourceTree = "<group>"; };
+		8C668CEB531FD05C1E573932 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		AC3E2DF2B5A3D80C4D094E93 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		AEC50364A9EB51FD9B884C31 /* VerdictSpeaker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerdictSpeaker.swift; sourceTree = "<group>"; };
+		AEE42619655A096B694A8DC4 /* AppConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfiguration.swift; sourceTree = "<group>"; };
+		DD3288CF89DF880AD58C30DA /* Defaults.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Defaults.xcconfig; sourceTree = "<group>"; };
+		E644345DC544E89C68855B53 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		EE67CD20F668B68B8D26D056 /* IPhoneCameraSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IPhoneCameraSource.swift; sourceTree = "<group>"; };
+		F78E5B0884CAEA09367AD943 /* DeviceIdentity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceIdentity.swift; sourceTree = "<group>"; };
+		FBA28B9A54AA16FEFC28B9D8 /* FreshVisionConsumer.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = FreshVisionConsumer.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		912CEC155392F346C4C1E4E6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BEB9814C1D0AE4C6669505AC /* MWDATCore in Frameworks */,
+				BCB2BCB79741E9827DD96A12 /* MWDATCamera in Frameworks */,
+				4C5F031FB393607E126EFD88 /* MWDATInputs in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		05C51B0C5CAE415D2BD32465 /* FreshVisionConsumer */ = {
+			isa = PBXGroup;
+			children = (
+				318685CB2BCE7FE70F19F8BA /* FreshVisionConsumer.entitlements */,
+				2C9365F6D8857AC7E1DE44E5 /* Info.plist */,
+				C79E1BA25CE4C428576A10FB /* App */,
+				9FAAFA81DB8B965C54550760 /* Capture */,
+				26DE662695D64A7AA0493387 /* Design */,
+				4815291B79E83ACA2AEF334E /* Models */,
+				6E238DF06B5A46C8F00C3962 /* Resources */,
+				0F036D9773F41028102FE87F /* Services */,
+				64EE11343C0C6B106A71D4CA /* Views */,
+			);
+			path = FreshVisionConsumer;
+			sourceTree = "<group>";
+		};
+		082760934F2FFC7E73881391 /* FreshVisionConsumerTests */ = {
+			isa = PBXGroup;
+			children = (
+				3CFF918854C6CCFE062551A5 /* FruitModelsTests.swift */,
+			);
+			path = FreshVisionConsumerTests;
+			sourceTree = "<group>";
+		};
+		0F036D9773F41028102FE87F /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				AEE42619655A096B694A8DC4 /* AppConfiguration.swift */,
+				F78E5B0884CAEA09367AD943 /* DeviceIdentity.swift */,
+				817757A9E7D8DDD16F7C1B97 /* FreshVisionAPI.swift */,
+				712078B7EB8060A16AD3973D /* ImageStore.swift */,
+				4AE41A4338FFD7D0A162CDA9 /* ScanController.swift */,
+				AEC50364A9EB51FD9B884C31 /* VerdictSpeaker.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		26DE662695D64A7AA0493387 /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				408B0CCD87FDC274E177DD58 /* Theme.swift */,
+			);
+			path = Design;
+			sourceTree = "<group>";
+		};
+		2AB41633D2C61A34337CADD3 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				DD3288CF89DF880AD58C30DA /* Defaults.xcconfig */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		42DBC4D257B37328F939267E = {
+			isa = PBXGroup;
+			children = (
+				2AB41633D2C61A34337CADD3 /* Config */,
+				05C51B0C5CAE415D2BD32465 /* FreshVisionConsumer */,
+				082760934F2FFC7E73881391 /* FreshVisionConsumerTests */,
+				920B19226E89A14A8434001F /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4815291B79E83ACA2AEF334E /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				84E9AB05565311A5D776B77A /* FruitModels.swift */,
+				3A06CC6816CF347011B4B18E /* ScanRecord.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		64EE11343C0C6B106A71D4CA /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				449438D872018DC5D1E1B470 /* GlassesSheet.swift */,
+				8C668CEB531FD05C1E573932 /* HistoryView.swift */,
+				4F0FF03B9393E637D3FF307F /* ResultView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		6E238DF06B5A46C8F00C3962 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				AC3E2DF2B5A3D80C4D094E93 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		920B19226E89A14A8434001F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FBA28B9A54AA16FEFC28B9D8 /* FreshVisionConsumer.app */,
+				38CFD2DD79CBCB961FEA6BD8 /* FreshVisionConsumerTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9FAAFA81DB8B965C54550760 /* Capture */ = {
+			isa = PBXGroup;
+			children = (
+				EE67CD20F668B68B8D26D056 /* IPhoneCameraSource.swift */,
+				2D63C4B51757B9319AE0D2CD /* MetaGlassesSource.swift */,
+				473E8D7968A7731E00DA59E7 /* MetaRuntime.swift */,
+			);
+			path = Capture;
+			sourceTree = "<group>";
+		};
+		C79E1BA25CE4C428576A10FB /* App */ = {
+			isa = PBXGroup;
+			children = (
+				441894B86EB16717BCD1756F /* FreshVisionConsumerApp.swift */,
+				E644345DC544E89C68855B53 /* RootView.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		44B1ACE36E8E63B20B0BBF30 /* FreshVisionConsumer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7ECB2A10D13F09B1EBCAA10C /* Build configuration list for PBXNativeTarget "FreshVisionConsumer" */;
+			buildPhases = (
+				C1FB47765E4972A744D14F6C /* Sources */,
+				C397E40D1A6B9AF4623791B6 /* Resources */,
+				912CEC155392F346C4C1E4E6 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FreshVisionConsumer;
+			packageProductDependencies = (
+				85DE071A91CBFC66B4B140F1 /* MWDATCore */,
+				0DF3F8C34348EA4BAD9E76F7 /* MWDATCamera */,
+				D5C73EAEEEF6CA19D15B0A37 /* MWDATInputs */,
+			);
+			productName = FreshVisionConsumer;
+			productReference = FBA28B9A54AA16FEFC28B9D8 /* FreshVisionConsumer.app */;
+			productType = "com.apple.product-type.application";
+		};
+		AFA1B30DB4AB40D68A65F97E /* FreshVisionConsumerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0F829DEFB7B876F2F05BFC89 /* Build configuration list for PBXNativeTarget "FreshVisionConsumerTests" */;
+			buildPhases = (
+				464F525861F12319541C05EF /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BE413A740124631B13F6C924 /* PBXTargetDependency */,
+			);
+			name = FreshVisionConsumerTests;
+			packageProductDependencies = (
+			);
+			productName = FreshVisionConsumerTests;
+			productReference = 38CFD2DD79CBCB961FEA6BD8 /* FreshVisionConsumerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		72C5124C35D48FEDCE645DBA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 2620;
+				TargetAttributes = {
+					44B1ACE36E8E63B20B0BBF30 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+					AFA1B30DB4AB40D68A65F97E = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 5EC6106F7C85AB45F92F1375 /* Build configuration list for PBXProject "FreshVisionConsumer" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 42DBC4D257B37328F939267E;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				A17AD6C39C5F55D155059C9A /* XCRemoteSwiftPackageReference "meta-wearables-dat-ios" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 920B19226E89A14A8434001F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				44B1ACE36E8E63B20B0BBF30 /* FreshVisionConsumer */,
+				AFA1B30DB4AB40D68A65F97E /* FreshVisionConsumerTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C397E40D1A6B9AF4623791B6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				921507D876B274278A69105B /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		464F525861F12319541C05EF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4BDDF448CAB54D7B7DAE1D91 /* FruitModelsTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C1FB47765E4972A744D14F6C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6F4DF72D46DCD7D59E6FFD64 /* AppConfiguration.swift in Sources */,
+				DBEB1875CE7085EC2521C595 /* DeviceIdentity.swift in Sources */,
+				B983B7DC20C39FB6FD871F6A /* FreshVisionAPI.swift in Sources */,
+				3B1FDE1AC8B3F4434A9B4029 /* FreshVisionConsumerApp.swift in Sources */,
+				4D5A4D0AD12D15A18102CBAA /* FruitModels.swift in Sources */,
+				317E1817CF3149889B3940C0 /* GlassesSheet.swift in Sources */,
+				2088091094FF03D3FF61598A /* HistoryView.swift in Sources */,
+				A15224FC0155FCEAABBB1A10 /* IPhoneCameraSource.swift in Sources */,
+				77D12F5E7C1ABD35C80AD9EC /* ImageStore.swift in Sources */,
+				A67422D32899F780564B4246 /* MetaGlassesSource.swift in Sources */,
+				54F5B1B77FBE0E4A961D47E0 /* MetaRuntime.swift in Sources */,
+				02C7346013B701329EA7CBA8 /* ResultView.swift in Sources */,
+				A21F2EAD2C9F69B3CD28027C /* RootView.swift in Sources */,
+				F656A85511EFDC6D85D4099D /* ScanController.swift in Sources */,
+				D898F888F8465ABEBA781064 /* ScanRecord.swift in Sources */,
+				1D3B100337E1B9A796D14262 /* Theme.swift in Sources */,
+				5F5F12A4EA5F716AB78E1514 /* VerdictSpeaker.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		BE413A740124631B13F6C924 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 44B1ACE36E8E63B20B0BBF30 /* FreshVisionConsumer */;
+			targetProxy = AD9C2DA5AC7BAC977876D06F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		25E9FD82D71599002B48DDEA /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DD3288CF89DF880AD58C30DA /* Defaults.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = FreshVisionConsumer/FreshVisionConsumer.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = FreshVisionConsumer/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = FreshVision;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.coraglobalprojects.freshvision.consumer;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		868350BF91E05F8811E5F0D9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		8ABADB5572C16AAF0D751AF6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.coraglobalprojects.freshvision.consumer.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FreshVisionConsumer.app/FreshVisionConsumer";
+			};
+			name = Debug;
+		};
+		E56A436C1376C12855CAD520 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		EAC7D950792DE8B037E83505 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = DD3288CF89DF880AD58C30DA /* Defaults.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = FreshVisionConsumer/FreshVisionConsumer.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = FreshVisionConsumer/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = FreshVision;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.coraglobalprojects.freshvision.consumer;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		F77154F685DE7D569E53D2F3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.coraglobalprojects.freshvision.consumer.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FreshVisionConsumer.app/FreshVisionConsumer";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0F829DEFB7B876F2F05BFC89 /* Build configuration list for PBXNativeTarget "FreshVisionConsumerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8ABADB5572C16AAF0D751AF6 /* Debug */,
+				F77154F685DE7D569E53D2F3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		5EC6106F7C85AB45F92F1375 /* Build configuration list for PBXProject "FreshVisionConsumer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				868350BF91E05F8811E5F0D9 /* Debug */,
+				E56A436C1376C12855CAD520 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		7ECB2A10D13F09B1EBCAA10C /* Build configuration list for PBXNativeTarget "FreshVisionConsumer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EAC7D950792DE8B037E83505 /* Debug */,
+				25E9FD82D71599002B48DDEA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A17AD6C39C5F55D155059C9A /* XCRemoteSwiftPackageReference "meta-wearables-dat-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/facebook/meta-wearables-dat-ios";
+			requirement = {
+				kind = exactVersion;
+				version = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		0DF3F8C34348EA4BAD9E76F7 /* MWDATCamera */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A17AD6C39C5F55D155059C9A /* XCRemoteSwiftPackageReference "meta-wearables-dat-ios" */;
+			productName = MWDATCamera;
+		};
+		85DE071A91CBFC66B4B140F1 /* MWDATCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A17AD6C39C5F55D155059C9A /* XCRemoteSwiftPackageReference "meta-wearables-dat-ios" */;
+			productName = MWDATCore;
+		};
+		D5C73EAEEEF6CA19D15B0A37 /* MWDATInputs */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A17AD6C39C5F55D155059C9A /* XCRemoteSwiftPackageReference "meta-wearables-dat-ios" */;
+			productName = MWDATInputs;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 72C5124C35D48FEDCE645DBA /* Project object */;
+}
