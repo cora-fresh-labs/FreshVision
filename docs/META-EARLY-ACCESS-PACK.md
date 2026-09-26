@@ -24,6 +24,7 @@ A shopper can keep both hands free while holding a basket, moving fruit, or comp
 - It asks for another image when lighting, framing, or the fruit is unsupported.
 - It is shopping guidance, not food-safety advice.
 - Photos and feedback are private and are not publicly accessible.
+- Every image is disclosed as being sent to FreshVision's private Supabase backend and Anthropic for analysis, and the shopper can delete the FreshVision copies from History.
 
 ## Why this is useful to Meta
 

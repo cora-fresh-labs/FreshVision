@@ -1,5 +1,6 @@
 import { assertEquals, assertThrows } from "jsr:@std/assert@1";
 import { validateAnalysis } from "./analysis.ts";
+import { safeError } from "./http.ts";
 
 Deno.test("accepts one supported fruit and fixed verdict", () => {
   assertEquals(
@@ -58,4 +59,15 @@ Deno.test("keeps the explanation to one short sentence", () => {
     confidence: 0.7,
   });
   assertEquals(result.reason, "The image is too dark.");
+});
+
+Deno.test("does not expose internal backend errors", () => {
+  assertEquals(
+    safeError(
+      new Error(
+        "duplicate key value violates unique constraint consumer_scans_pkey",
+      ),
+    ),
+    "FreshVision couldn’t finish that scan. Please try again.",
+  );
 });

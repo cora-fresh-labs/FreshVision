@@ -38,7 +38,39 @@ struct RootView: View {
       await phone.start()
     }
     .onChange(of: scenePhase) { _, phase in
-      if phase == .active { Task { await controller.syncPending() } }
+      if phase == .active {
+        Task {
+          await controller.syncPending()
+          if controller.phase == .camera {
+            if controller.selectedSource == .iPhone { await phone.start() }
+            else { _ = await glasses.connectAndPreview() }
+          }
+        }
+      } else {
+        phone.stop()
+        glasses.stop()
+      }
+    }
+    .onChange(of: controller.selectedSource) { _, source in
+      Task {
+        if source == .iPhone {
+          glasses.stop()
+          await phone.start()
+        } else {
+          phone.stop()
+        }
+      }
+    }
+    .onChange(of: controller.phase) { _, phase in
+      if phase == .result {
+        phone.stop()
+        glasses.stop()
+      } else if phase == .camera && scenePhase == .active {
+        Task {
+          if controller.selectedSource == .iPhone { await phone.start() }
+          else { _ = await glasses.connectAndPreview() }
+        }
+      }
     }
     .onChange(of: glasses.captureButtonRequest) { _, _ in
       guard controller.selectedSource == .metaGlasses, controller.phase == .camera else { return }
@@ -48,6 +80,13 @@ struct RootView: View {
     .sheet(isPresented: $showHistory) { HistoryView(controller: controller) }
     .sheet(isPresented: $showGlasses) {
       GlassesSheet(glasses: glasses, controller: controller).presentationDetents([.medium, .large])
+    }
+    .task(id: scenePhase) {
+      guard scenePhase == .active else { return }
+      while !Task.isCancelled {
+        try? await Task.sleep(for: .seconds(20))
+        if !Task.isCancelled { await controller.syncPending() }
+      }
     }
     .alert(
       "FreshVision",
@@ -117,6 +156,9 @@ private struct CameraChrome: View {
             .caption2.bold())
         }.frame(width: 70, height: 48)
       }.foregroundStyle(FVColor.cream).padding(.horizontal, 24).padding(.bottom, 24)
+      Text("Photos are saved privately and sent for AI analysis. Delete them from History.")
+        .font(.caption2).multilineTextAlignment(.center).foregroundStyle(FVColor.cream.opacity(0.72))
+        .padding(.horizontal, 28).padding(.bottom, 8)
     }.background(
       LinearGradient(
         colors: [.black.opacity(0.72), .clear, .clear, .black.opacity(0.78)], startPoint: .top,

@@ -24,8 +24,10 @@
 		A21F2EAD2C9F69B3CD28027C /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E644345DC544E89C68855B53 /* RootView.swift */; };
 		A67422D32899F780564B4246 /* MetaGlassesSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D63C4B51757B9319AE0D2CD /* MetaGlassesSource.swift */; };
 		B983B7DC20C39FB6FD871F6A /* FreshVisionAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817757A9E7D8DDD16F7C1B97 /* FreshVisionAPI.swift */; };
+		BC68A39C1D33434185D5C7BD /* AuthSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 784E4279C4B75D5D5C6A3790 /* AuthSession.swift */; };
 		BCB2BCB79741E9827DD96A12 /* MWDATCamera in Frameworks */ = {isa = PBXBuildFile; productRef = 0DF3F8C34348EA4BAD9E76F7 /* MWDATCamera */; };
 		BEB9814C1D0AE4C6669505AC /* MWDATCore in Frameworks */ = {isa = PBXBuildFile; productRef = 85DE071A91CBFC66B4B140F1 /* MWDATCore */; };
+		C0369EE925944910E1725187 /* FreshVisionMigrationPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F58496832A575E11920131A /* FreshVisionMigrationPlan.swift */; };
 		D898F888F8465ABEBA781064 /* ScanRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A06CC6816CF347011B4B18E /* ScanRecord.swift */; };
 		DBEB1875CE7085EC2521C595 /* DeviceIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F78E5B0884CAEA09367AD943 /* DeviceIdentity.swift */; };
 		F656A85511EFDC6D85D4099D /* ScanController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AE41A4338FFD7D0A162CDA9 /* ScanController.swift */; };
@@ -55,6 +57,8 @@
 		4AE41A4338FFD7D0A162CDA9 /* ScanController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanController.swift; sourceTree = "<group>"; };
 		4F0FF03B9393E637D3FF307F /* ResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
 		712078B7EB8060A16AD3973D /* ImageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStore.swift; sourceTree = "<group>"; };
+		784E4279C4B75D5D5C6A3790 /* AuthSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthSession.swift; sourceTree = "<group>"; };
+		7F58496832A575E11920131A /* FreshVisionMigrationPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreshVisionMigrationPlan.swift; sourceTree = "<group>"; };
 		817757A9E7D8DDD16F7C1B97 /* FreshVisionAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreshVisionAPI.swift; sourceTree = "<group>"; };
 		84E9AB05565311A5D776B77A /* FruitModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FruitModels.swift; sourceTree = "<group>"; };
 		8C668CEB531FD05C1E573932 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
@@ -110,6 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				AEE42619655A096B694A8DC4 /* AppConfiguration.swift */,
+				784E4279C4B75D5D5C6A3790 /* AuthSession.swift */,
 				F78E5B0884CAEA09367AD943 /* DeviceIdentity.swift */,
 				817757A9E7D8DDD16F7C1B97 /* FreshVisionAPI.swift */,
 				712078B7EB8060A16AD3973D /* ImageStore.swift */,
@@ -148,6 +153,7 @@
 		4815291B79E83ACA2AEF334E /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				7F58496832A575E11920131A /* FreshVisionMigrationPlan.swift */,
 				84E9AB05565311A5D776B77A /* FruitModels.swift */,
 				3A06CC6816CF347011B4B18E /* ScanRecord.swift */,
 			);
@@ -310,9 +316,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				6F4DF72D46DCD7D59E6FFD64 /* AppConfiguration.swift in Sources */,
+				BC68A39C1D33434185D5C7BD /* AuthSession.swift in Sources */,
 				DBEB1875CE7085EC2521C595 /* DeviceIdentity.swift in Sources */,
 				B983B7DC20C39FB6FD871F6A /* FreshVisionAPI.swift in Sources */,
 				3B1FDE1AC8B3F4434A9B4029 /* FreshVisionConsumerApp.swift in Sources */,
+				C0369EE925944910E1725187 /* FreshVisionMigrationPlan.swift in Sources */,
 				4D5A4D0AD12D15A18102CBAA /* FruitModels.swift in Sources */,
 				317E1817CF3149889B3940C0 /* GlassesSheet.swift in Sources */,
 				2088091094FF03D3FF61598A /* HistoryView.swift in Sources */,

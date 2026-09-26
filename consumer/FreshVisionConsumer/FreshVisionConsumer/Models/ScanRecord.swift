@@ -19,6 +19,7 @@ final class ScanRecord {
   var scanSyncedAt: Date?
   var feedbackSyncedAt: Date?
   var lastSyncError: String?
+  var pendingDeletion = false
 
   init(
     id: UUID = UUID(), capturedAt: Date, imageFilename: String, source: CaptureSource,

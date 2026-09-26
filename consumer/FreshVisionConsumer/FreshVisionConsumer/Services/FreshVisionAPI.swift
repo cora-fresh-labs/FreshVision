@@ -50,6 +50,7 @@ struct FeedbackSyncPayload: Codable, Sendable {
 actor FreshVisionAPI {
   private let configuration: AppConfiguration
   private let session: URLSession
+  private let auth: AuthSession
   private let encoder = JSONEncoder()
   private let decoder = JSONDecoder()
 
@@ -59,6 +60,7 @@ actor FreshVisionAPI {
     config.timeoutIntervalForRequest = 4.5
     config.timeoutIntervalForResource = 5
     session = URLSession(configuration: config)
+    auth = AuthSession(configuration: configuration, session: session)
     encoder.dateEncodingStrategy = .iso8601
     decoder.dateDecodingStrategy = .iso8601
   }
@@ -90,6 +92,11 @@ actor FreshVisionAPI {
     let _: EmptyResponse = try await post("save-consumer-feedback", payload)
   }
 
+  func deleteScan(id: UUID) async throws {
+    struct Payload: Encodable { let scanId: UUID }
+    let _: EmptyResponse = try await post("delete-consumer-scan", Payload(scanId: id))
+  }
+
   private func post<P: Encodable, R: Decodable>(_ function: String, _ payload: P) async throws -> R
   {
     guard configuration.isConfigured, let url = configuration.functionURL(function) else {
@@ -100,7 +107,7 @@ actor FreshVisionAPI {
     request.httpBody = try encoder.encode(payload)
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
     request.setValue(configuration.supabaseAnonKey, forHTTPHeaderField: "apikey")
-    request.setValue("Bearer \(configuration.supabaseAnonKey)", forHTTPHeaderField: "Authorization")
+    request.setValue("Bearer \(try await auth.accessToken())", forHTTPHeaderField: "Authorization")
     do {
       let (data, response) = try await session.data(for: request)
       guard let http = response as? HTTPURLResponse else {

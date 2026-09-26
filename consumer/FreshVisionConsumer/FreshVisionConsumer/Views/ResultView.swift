@@ -21,18 +21,17 @@ struct ResultView: View {
         if let verdict = scan.verdict {
           Text(scan.fruit?.displayName.uppercased() ?? "FRUIT").font(.caption.bold()).tracking(2.2)
             .foregroundStyle(color)
-          Text(verdict.rawValue).font(.system(size: 48, weight: .black, design: .rounded))
-            .minimumScaleFactor(0.7).foregroundStyle(FVColor.cream).padding(.top, 10)
+          Text(verdict.rawValue).font(.largeTitle.weight(.black)).fontDesign(.rounded)
+            .foregroundStyle(FVColor.cream).padding(.top, 10)
           Text(scan.reason ?? "Look for even color and firm, unbroken skin.").font(
-            .system(size: 23, weight: .medium, design: .rounded)
+            .title2.weight(.medium)
           ).foregroundStyle(FVColor.cream.opacity(0.86)).padding(.top, 20)
             .accessibilityLabel(
               "Reason: \(scan.reason ?? "Look for even color and firm, unbroken skin.")")
         } else {
           Text("TRY AGAIN").font(.caption.bold()).tracking(2.2).foregroundStyle(FVColor.amber)
-          Text(controller.shopperMessage ?? "I couldn’t judge that fruit.").font(
-            .system(size: 38, weight: .black, design: .rounded)
-          ).foregroundStyle(FVColor.cream).padding(.top, 10)
+          Text(controller.shopperMessage ?? "I couldn’t judge that fruit.").font(.largeTitle.bold())
+            .fontDesign(.rounded).foregroundStyle(FVColor.cream).padding(.top, 10)
           if scan.state == .needsRetry {
             Button("Try this photo again") { Task { await controller.retry(scan) } }.buttonStyle(
               FVPrimaryButtonStyle(color: FVColor.amber)

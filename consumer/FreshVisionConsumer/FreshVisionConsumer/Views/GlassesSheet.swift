@@ -28,7 +28,12 @@ struct GlassesSheet: View {
           if !glasses.isRegistered {
             await glasses.register()
           } else if !glasses.isStreaming {
-            _ = await glasses.connectAndPreview()
+            let connected = await glasses.connectAndPreview()
+            if connected {
+              controller.selectedSource = .metaGlasses
+              dismiss()
+            }
+            return
           }
           if glasses.isStreaming {
             controller.selectedSource = .metaGlasses
@@ -37,6 +42,7 @@ struct GlassesSheet: View {
         }
       }.buttonStyle(FVPrimaryButtonStyle(color: FVColor.lime))
       Button("Use iPhone camera") {
+        glasses.stop()
         controller.selectedSource = .iPhone
         dismiss()
       }.font(.headline).frame(maxWidth: .infinity).padding(.vertical, 10)

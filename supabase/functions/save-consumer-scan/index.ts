@@ -1,4 +1,9 @@
 import { json, preflight, readJson, safeError } from "../_shared/http.ts";
+import {
+  enforceRateLimit,
+  PublicError,
+  requireCaller,
+} from "../_shared/auth.ts";
 import { serviceClient } from "../_shared/supabase.ts";
 
 type Scan = {
@@ -23,12 +28,30 @@ Deno.serve(async (request) => {
     return json({ error: "Method not allowed." }, 405);
   }
   try {
+    const caller = await requireCaller(request);
+    await enforceRateLimit(
+      request,
+      caller.userId,
+      "save-scan",
+      100,
+      300,
+      2_000,
+    );
     const { scan, imageBase64 } = await readJson<RequestBody>(request);
     if (!scan?.id || !scan.installationId || !imageBase64) {
       return json({ error: "That scan is incomplete." }, 400);
     }
     const client = serviceClient();
-    const photoPath = `${scan.installationId}/${scan.id}.jpg`;
+    const existing = await client.from("consumer_scans").select("owner_id").eq(
+      "id",
+      scan.id,
+    )
+      .maybeSingle();
+    if (existing.error) throw existing.error;
+    if (existing.data && existing.data.owner_id !== caller.userId) {
+      throw new PublicError("That scan could not be saved.", 403);
+    }
+    const photoPath = `${caller.userId}/${scan.id}.jpg`;
     const bytes = Uint8Array.from(
       atob(imageBase64),
       (character) => character.charCodeAt(0),
@@ -44,6 +67,7 @@ Deno.serve(async (request) => {
     if (upload.error) throw upload.error;
     const result = await client.from("consumer_scans").upsert({
       id: scan.id,
+      owner_id: caller.userId,
       installation_id: scan.installationId,
       captured_at: scan.capturedAt,
       photo_path: photoPath,
@@ -60,6 +84,9 @@ Deno.serve(async (request) => {
     if (result.error) throw result.error;
     return json({});
   } catch (error) {
-    return json({ error: safeError(error) }, 422);
+    return json(
+      { error: safeError(error) },
+      error instanceof PublicError ? error.status : 422,
+    );
   }
 });

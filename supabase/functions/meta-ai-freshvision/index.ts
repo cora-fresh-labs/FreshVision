@@ -1,4 +1,9 @@
 import { analyzeFruit } from "../_shared/analysis.ts";
+import {
+  enforceRateLimit,
+  PublicError,
+  requireConnector,
+} from "../_shared/auth.ts";
 import { json, preflight, readJson, safeError } from "../_shared/http.ts";
 
 type RequestBody = {
@@ -15,6 +20,15 @@ Deno.serve(async (request) => {
     return json({ error: "Method not allowed." }, 405);
   }
   try {
+    requireConnector(request);
+    await enforceRateLimit(
+      request,
+      "meta-connector",
+      "connector-analyze",
+      100,
+      150,
+      200,
+    );
     const body = await readJson<RequestBody>(request);
     const toolName = body.tool ?? body.name ?? "assess_fruit";
     if (toolName !== "assess_fruit") {
@@ -28,6 +42,9 @@ Deno.serve(async (request) => {
       : result.reason;
     return json({ result, spoken_response: spokenResponse });
   } catch (error) {
-    return json({ error: safeError(error) }, 422);
+    return json(
+      { error: safeError(error) },
+      error instanceof PublicError ? error.status : 422,
+    );
   }
 });

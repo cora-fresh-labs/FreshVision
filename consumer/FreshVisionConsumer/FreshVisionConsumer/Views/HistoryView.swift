@@ -5,19 +5,27 @@ struct HistoryView: View {
   @Environment(\.dismiss) private var dismiss
   @Query(sort: \ScanRecord.capturedAt, order: .reverse) private var scans: [ScanRecord]
   @ObservedObject var controller: ScanController
+  private var visibleScans: [ScanRecord] { scans.filter { !$0.pendingDeletion } }
   var body: some View {
     NavigationStack {
       Group {
-        if scans.isEmpty {
+        if visibleScans.isEmpty {
           ContentUnavailableView(
             "No scans yet", systemImage: "camera.viewfinder",
             description: Text("Your fruit scans will appear here."))
         } else {
-          List(scans) { scan in
+          List(visibleScans) { scan in
             HistoryRow(scan: scan, controller: controller).listRowSeparator(.hidden)
               .listRowBackground(Color.clear)
+              .swipeActions {
+                Button("Delete", role: .destructive) { Task { await controller.delete(scan) } }
+              }
           }.listStyle(.plain)
         }
+      }.safeAreaInset(edge: .bottom) {
+        Text("Each photo is kept on this phone and in private FreshVision storage until you delete it. It is sent to Anthropic for AI analysis. Swipe a scan to delete the FreshVision copies.")
+          .font(.caption).foregroundStyle(FVColor.ink.opacity(0.66)).padding(12)
+          .frame(maxWidth: .infinity).background(FVColor.cream)
       }.background(FVColor.cream.ignoresSafeArea()).navigationTitle("History").toolbar {
         Button("Done") { dismiss() }
       }
@@ -30,10 +38,12 @@ private struct HistoryRow: View {
   @ObservedObject var controller: ScanController
   var body: some View {
     HStack(spacing: 14) {
-      AsyncImage(url: controller.imageURL(for: scan)) {
-        $0.resizable().scaledToFill()
-      } placeholder: {
-        FVColor.ink.opacity(0.08)
+      Group {
+        if let image = controller.image(for: scan) {
+          Image(uiImage: image).resizable().scaledToFill()
+        } else {
+          FVColor.ink.opacity(0.08)
+        }
       }.frame(width: 76, height: 88).clipShape(RoundedRectangle(cornerRadius: 16))
       VStack(alignment: .leading, spacing: 7) {
         Text(scan.fruit?.displayName ?? "Fruit scan").font(.caption.bold()).textCase(.uppercase)

@@ -37,8 +37,22 @@ export async function readJson<T>(
 }
 
 export function safeError(error: unknown): string {
-  if (error instanceof Error && error.message.length <= 180) {
+  const allowed = [
+    "That photo is too large. Please take another.",
+    "FreshVision analysis is not configured.",
+    "FreshVision couldn’t finish that scan. Please try again.",
+    "That took too long. Please try again.",
+    "I couldn’t read that result. Please try again.",
+    "Open FreshVision again and retry.",
+    "FreshVision has reached today’s scan limit. Try again tomorrow.",
+    "That scan could not be saved.",
+    "That feedback could not be saved.",
+    "That scan could not be deleted.",
+    "FreshVision connector is not authorized.",
+  ];
+  if (error instanceof Error && allowed.includes(error.message)) {
     return error.message;
   }
+  console.error(error);
   return "FreshVision couldn’t finish that scan. Please try again.";
 }

@@ -25,6 +25,10 @@ final class IPhoneCameraSource: NSObject, ObservableObject {
   }
 
   func stop() {
+    if let continuation {
+      self.continuation = nil
+      continuation.resume(throwing: CaptureError.notReady)
+    }
     let pipeline = pipeline
     pipeline.queue.async {
       if pipeline.session.isRunning { pipeline.session.stopRunning() }
@@ -99,13 +103,14 @@ extension IPhoneCameraSource: AVCapturePhotoCaptureDelegate {
 }
 
 enum CaptureError: LocalizedError {
-  case notReady, captureInProgress, noImageData, glassesNotConnected
+  case notReady, captureInProgress, noImageData, glassesNotConnected, storageUnavailable
   var errorDescription: String? {
     switch self {
     case .notReady: "The camera isn’t ready yet."
     case .captureInProgress: "One photo is already being taken."
     case .noImageData: "The photo didn’t save. Please try again."
     case .glassesNotConnected: "Connect your Meta glasses first."
+    case .storageUnavailable: "This photo could not be stored safely. Free some space and try again."
     }
   }
 }

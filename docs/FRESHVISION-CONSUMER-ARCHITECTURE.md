@@ -13,9 +13,11 @@ The app is separate from the parked packhouse QC prototype. It has no grading co
 5. Show one large verdict and one plain-English reason.
 6. Upload the scan and optional vote to Supabase, retrying until confirmed.
 
-`FruitCaptureSource` separates hardware from the product pipeline. Every scan records `iphone` or `meta_glasses` so performance can be measured separately.
+`CaptureSource` separates hardware from the product pipeline. Every scan records `iphone` or `meta_glasses` so performance can be measured separately.
 
 SwiftData is the tester-facing source of truth. Images live in Application Support. Client-generated UUIDs make backend retries idempotent.
+
+Each installation establishes an anonymous Supabase Auth session stored in the iOS Keychain. Edge Functions bind every scan to that authenticated owner, enforce daily per-user and project-wide limits, and never trust the bundled publishable key as identity. App Attest is the next hardening step before distribution expands beyond the two-person pilot.
 
 The prototype uses a server-side vision model. The fine-tuned model can replace that adapter later without changing the app, history or database contract.
 

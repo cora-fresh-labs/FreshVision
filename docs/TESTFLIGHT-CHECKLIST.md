@@ -7,10 +7,13 @@
 - [x] Fixed fruit and verdict contract tests pass.
 - [x] Edge Functions type-check and analysis validation tests pass.
 - [x] Every image is written locally before analysis or upload.
-- [x] Pending scans and feedback retry when the app becomes active.
+- [x] Pending scans and feedback retry while active and when the app becomes
+      active.
+- [x] Test clients use anonymous Supabase Auth sessions stored in Keychain.
+- [x] Edge Functions enforce ownership and daily user and network rate limits.
 - [ ] Apply the private Supabase migration.
 - [ ] Set the server-side Anthropic model and API secret.
-- [ ] Deploy and smoke-test the four Edge Functions.
+- [ ] Deploy and smoke-test the five Edge Functions.
 - [ ] Add the Supabase client configuration to the private Xcode configuration.
 
 ## Meta glasses
@@ -25,10 +28,14 @@
 
 ## Acceptance testing
 
-- [ ] Photograph at least 10 examples of each supported fruit under store lighting.
-- [ ] Confirm fruit identification is correct at least 9 times out of 10 for each fruit.
-- [ ] Confirm median verdict time is under 5 seconds on a normal store connection.
-- [ ] Confirm unsupported fruit, no fruit, multiple fruit, poor light and offline messages.
+- [ ] Photograph at least 10 examples of each supported fruit under store
+      lighting.
+- [ ] Confirm fruit identification is correct at least 9 times out of 10 for
+      each fruit.
+- [ ] Confirm median verdict time is under 5 seconds on a normal store
+      connection.
+- [ ] Confirm unsupported fruit, no fruit, multiple fruit, poor light and
+      offline messages.
 - [ ] Confirm every test scan and vote appears in Supabase.
 - [ ] Give an instruction-free build to both non-technical testers.
 
@@ -37,5 +44,6 @@
 - [ ] Confirm Apple Developer team and signing profile.
 - [ ] Create the App Store Connect record for the private TestFlight app.
 - [ ] Add camera, photo retention and model-processing privacy copy.
+- [ ] Add Apple App Attest before increasing access beyond the two-person pilot.
 - [ ] Archive and validate the release build.
 - [ ] Upload only after Clint approves the build and tester list.

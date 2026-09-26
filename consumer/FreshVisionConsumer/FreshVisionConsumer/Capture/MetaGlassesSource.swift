@@ -84,7 +84,10 @@ final class MetaGlassesSource: ObservableObject {
         let session = try wearables.createSession(deviceSelector: selector)
         deviceSession = session
         session.statePublisher.listen { [weak self] state in
-          Task { @MainActor in self?.sessionState = state }
+          Task { @MainActor in
+            self?.sessionState = state
+            if state == .stopped { self?.sessionDidStop() }
+          }
         }.store(in: sessionTokens)
         try session.start()
         for await state in session.stateStream() {
@@ -94,7 +97,9 @@ final class MetaGlassesSource: ObservableObject {
       }
       try startInputs()
       try await startPreview()
-      return await waitUntilStreaming()
+      let ready = await waitUntilStreaming()
+      if !ready { stop() }
+      return ready
     } catch {
       message = "I couldn’t start the glasses camera. Please try again."
       stop()
@@ -112,6 +117,7 @@ final class MetaGlassesSource: ObservableObject {
     }
   }
   func stop() {
+    failPendingCapture(CaptureError.glassesNotConnected)
     camera?.stop()
     try? deviceSession?.removeInputs()
     deviceSession?.stop()
@@ -153,7 +159,10 @@ final class MetaGlassesSource: ObservableObject {
     }
     self.camera = camera
     camera.stream.statePublisher.listen { [weak self] state in
-      Task { @MainActor in self?.streamState = state }
+      Task { @MainActor in
+        self?.streamState = state
+        if state == .stopped { self?.streamDidStop() }
+      }
     }.store(in: streamTokens)
     camera.stream.videoFramePublisher.listen { [weak self] frame in
       guard let image = frame.makeUIImage() else { return }
@@ -168,6 +177,34 @@ final class MetaGlassesSource: ObservableObject {
     guard let continuation = photoContinuation else { return }
     photoContinuation = nil
     continuation.resume(returning: .init(jpegData: data, source: .metaGlasses, capturedAt: Date()))
+  }
+
+  private func failPendingCapture(_ error: Error) {
+    guard let continuation = photoContinuation else { return }
+    photoContinuation = nil
+    continuation.resume(throwing: error)
+  }
+
+  private func streamDidStop() {
+    failPendingCapture(CaptureError.glassesNotConnected)
+    streamTokens.clear()
+    camera = nil
+    previewImage = nil
+    streamState = .stopped
+  }
+
+  private func sessionDidStop() {
+    failPendingCapture(CaptureError.glassesNotConnected)
+    streamTokens.clear()
+    sessionTokens.clear()
+    inputsTask?.cancel()
+    inputsTask = nil
+    inputs = nil
+    camera = nil
+    deviceSession = nil
+    previewImage = nil
+    streamState = .stopped
+    sessionState = .idle
   }
 
   private func waitUntilStreaming() async -> Bool {

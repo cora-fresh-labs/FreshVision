@@ -7,6 +7,10 @@ struct ImageStore: Sendable {
       for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
     directory = base.appending(path: "FreshVisionScans", directoryHint: .isDirectory)
     try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+    var values = URLResourceValues()
+    values.isExcludedFromBackup = true
+    var mutableDirectory = directory
+    try mutableDirectory.setResourceValues(values)
   }
   func save(_ data: Data, id: UUID) throws -> String {
     let name = "\(id.uuidString.lowercased()).jpg"
@@ -17,4 +21,10 @@ struct ImageStore: Sendable {
     try Data(contentsOf: directory.appending(path: name))
   }
   func url(for name: String) -> URL { directory.appending(path: name) }
+  func delete(_ name: String) throws {
+    let target = url(for: name)
+    if FileManager.default.fileExists(atPath: target.path) {
+      try FileManager.default.removeItem(at: target)
+    }
+  }
 }

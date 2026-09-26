@@ -12,4 +12,5 @@ struct AppConfiguration: Sendable {
     supabaseURL?.host != nil && !supabaseAnonKey.isEmpty && !supabaseAnonKey.contains("public-anon")
   }
   func functionURL(_ name: String) -> URL? { supabaseURL?.appending(path: "functions/v1/\(name)") }
+  func authURL(_ path: String) -> URL? { supabaseURL?.appending(path: "auth/v1/\(path)") }
 }
