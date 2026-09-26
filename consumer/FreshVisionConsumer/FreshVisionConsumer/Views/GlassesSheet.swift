@@ -28,7 +28,7 @@ struct GlassesSheet: View {
           if !glasses.isRegistered {
             await glasses.register()
           } else if !glasses.isStreaming {
-            await glasses.connectAndPreview()
+            _ = await glasses.connectAndPreview()
           }
           if glasses.isStreaming {
             controller.selectedSource = .metaGlasses

@@ -70,14 +70,14 @@ final class MetaGlassesSource: ObservableObject {
       message = "The glasses connection didn’t finish. Please try again."
     }
   }
-  func connectAndPreview() async {
+  func connectAndPreview() async -> Bool {
     guard let wearables, let selector else {
       message = MetaRuntime.setupMessage ?? "Meta glasses are not configured yet."
-      return
+      return false
     }
     guard isRegistered, !devices.isEmpty else {
       message = "Connect your Meta glasses first."
-      return
+      return false
     }
     do {
       if deviceSession == nil {
@@ -94,9 +94,11 @@ final class MetaGlassesSource: ObservableObject {
       }
       try startInputs()
       try await startPreview()
+      return await waitUntilStreaming()
     } catch {
       message = "I couldn’t start the glasses camera. Please try again."
       stop()
+      return false
     }
   }
   func capture() async throws -> CapturedFruitImage {
@@ -166,5 +168,14 @@ final class MetaGlassesSource: ObservableObject {
     guard let continuation = photoContinuation else { return }
     photoContinuation = nil
     continuation.resume(returning: .init(jpegData: data, source: .metaGlasses, capturedAt: Date()))
+  }
+
+  private func waitUntilStreaming() async -> Bool {
+    for _ in 0..<50 {
+      if isStreaming { return true }
+      try? await Task.sleep(for: .milliseconds(100))
+    }
+    message = "The glasses camera took too long to start. Please try again."
+    return false
   }
 }
