@@ -9,14 +9,19 @@ final class ScanController: ObservableObject {
   @Published var shopperMessage: String?
   @Published var showsFeedback = true
   @Published var selectedSource: CaptureSource = .iPhone
-  private let api = FreshVisionAPI()
-  private let images = try? ImageStore()
-  private let speaker = VerdictSpeaker()
+  private let api: FreshVisionAPI
+  private let images: ImageStore?
+  let speaker = VerdictSpeaker()
   private var context: ModelContext?
   private var isSyncing = false
   private var analysesInFlight: Set<UUID> = []
   private var scanUploadsInFlight: Set<UUID> = []
   private var feedbackUploadsInFlight: Set<UUID> = []
+
+  init(api: FreshVisionAPI = FreshVisionAPI(), images: ImageStore? = try? ImageStore()) {
+    self.api = api
+    self.images = images
+  }
 
   func attach(_ context: ModelContext) {
     self.context = context
@@ -32,7 +37,7 @@ final class ScanController: ObservableObject {
     else { return }
     for scan in scans where scan.pendingDeletion { await finishDeletion(scan) }
     for scan in scans where !scan.pendingDeletion && scan.scanSyncedAt == nil {
-      if scan.state != .complete {
+      if scan.state == .captured || scan.state == .analyzing {
         if analysesInFlight.contains(scan.id) { continue }
         guard let data = try? images?.data(for: scan.imageFilename) else { continue }
         await analyze(scan, data, presentResult: false)
@@ -62,12 +67,40 @@ final class ScanController: ObservableObject {
     }
   }
   func newScan() {
+    speaker.stop()
     activeScan = nil
     shopperMessage = nil
     showsFeedback = true
     phase = .camera
   }
   func dismissFeedback() { showsFeedback = false }
+  func importPhoto(_ data: Data) async {
+    guard phase == .camera else { return }
+    phase = .capturing
+    shopperMessage = nil
+    do {
+      try await process(.init(jpegData: data, source: .iPhone, capturedAt: Date()))
+    } catch {
+      phase = .camera
+      shopperMessage = error.localizedDescription
+    }
+  }
+  func show(_ scan: ScanRecord) {
+    speaker.stop()
+    activeScan = scan
+    shopperMessage = scan.issue.flatMap { _ in
+      FruitAnalysisResponse(supported: false, fruit: nil, verdict: nil, reason: scan.reason ?? "",
+                            issue: scan.issue, confidence: scan.confidence ?? 0).shopperMessage
+    } ?? scan.lastSyncError
+    showsFeedback = scan.feedback == nil
+    phase = .result
+  }
+  func speak(_ scan: ScanRecord) async {
+    guard scan.verdict != nil, !scan.pendingDeletion else { return }
+    if scan.scanSyncedAt == nil { await syncScan(scan) }
+    guard activeScan?.id == scan.id, phase == .result else { return }
+    speaker.speak(scanID: scan.id, api: api)
+  }
   func image(for scan: ScanRecord) -> UIImage? {
     guard let path = images?.url(for: scan.imageFilename).path else { return nil }
     return UIImage(contentsOfFile: path)
@@ -93,11 +126,16 @@ final class ScanController: ObservableObject {
     Task { await syncFeedback(scan) }
   }
   func retry(_ scan: ScanRecord) async {
+    guard phase != .analyzing, phase != .capturing else { return }
     guard let data = try? images?.data(for: scan.imageFilename) else { return }
+    speaker.stop()
+    speaker.invalidate(scan.id)
     activeScan = scan
+    scan.scanSyncedAt = nil
     phase = .analyzing
     await analyze(scan, data)
     await syncScan(scan)
+    if scan.verdict != nil { await speak(scan) }
   }
   func delete(_ scan: ScanRecord) async {
     guard let context else { return }
@@ -105,6 +143,7 @@ final class ScanController: ObservableObject {
       scan.pendingDeletion = true
       try context.save()
       if activeScan?.id == scan.id { newScan() }
+      speaker.invalidate(scan.id)
     } catch {
       shopperMessage = "That scan could not be deleted. Check your connection and try again."
       return
@@ -130,6 +169,7 @@ final class ScanController: ObservableObject {
     phase = .analyzing
     await analyze(scan, data)
     await syncScan(scan)
+    if scan.verdict != nil { await speak(scan) }
   }
   private func analyze(_ scan: ScanRecord, _ data: Data, presentResult: Bool = true) async {
     guard analysesInFlight.insert(scan.id).inserted else { return }
@@ -142,14 +182,17 @@ final class ScanController: ObservableObject {
       scan.issue = result.issue
       scan.confidence = result.confidence
       scan.state = .complete
+      scan.lastSyncError = nil
       if presentResult {
         shopperMessage = result.shopperMessage
-        if scan.source == .metaGlasses, let verdict = result.verdict {
-          speaker.speak(verdict: verdict, reason: result.reason)
-        }
       }
     } catch {
       scan.state = .needsRetry
+      scan.fruit = nil
+      scan.verdict = nil
+      scan.reason = nil
+      scan.issue = nil
+      scan.confidence = nil
       scan.lastSyncError = error.localizedDescription
       if presentResult { shopperMessage = error.localizedDescription }
     }
@@ -197,9 +240,10 @@ final class ScanController: ObservableObject {
     guard scan.pendingDeletion, let context else { return }
     do {
       try images?.delete(scan.imageFilename)
-      while scanUploadsInFlight.contains(scan.id) {
+      for _ in 0..<200 where scanUploadsInFlight.contains(scan.id) {
         try await Task.sleep(for: .milliseconds(100))
       }
+      guard !scanUploadsInFlight.contains(scan.id) else { throw FreshVisionAPIError.timedOut }
       try await api.deleteScan(id: scan.id)
       context.delete(scan)
       try context.save()

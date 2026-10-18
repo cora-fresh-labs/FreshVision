@@ -16,6 +16,7 @@ struct HistoryView: View {
         } else {
           List(visibleScans) { scan in
             HistoryRow(scan: scan, controller: controller).listRowSeparator(.hidden)
+              .onTapGesture { controller.show(scan); dismiss() }
               .listRowBackground(Color.clear)
               .swipeActions {
                 Button("Delete", role: .destructive) { Task { await controller.delete(scan) } }
@@ -23,7 +24,7 @@ struct HistoryView: View {
           }.listStyle(.plain)
         }
       }.safeAreaInset(edge: .bottom) {
-        Text("Each photo is kept on this phone and in private FreshVision storage until you delete it. It is sent to Anthropic for AI analysis. Swipe a scan to delete the FreshVision copies.")
+        Text("Photos stay on this phone and upload to private FreshVision storage when connected. Photos go to Anthropic for analysis. Spoken verdict text goes to ElevenLabs. Swipe a scan to delete the FreshVision copies.")
           .font(.caption).foregroundStyle(FVColor.ink.opacity(0.66)).padding(12)
           .frame(maxWidth: .infinity).background(FVColor.cream)
       }.background(FVColor.cream.ignoresSafeArea()).navigationTitle("History").toolbar {

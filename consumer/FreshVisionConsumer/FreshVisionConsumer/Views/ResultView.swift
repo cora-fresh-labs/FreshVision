@@ -28,6 +28,8 @@ struct ResultView: View {
           ).foregroundStyle(FVColor.cream.opacity(0.86)).padding(.top, 20)
             .accessibilityLabel(
               "Reason: \(scan.reason ?? "Look for even color and firm, unbroken skin.")")
+          VerdictVoiceControl(scan: scan, controller: controller, speaker: controller.speaker)
+            .padding(.top, 18)
         } else {
           Text("TRY AGAIN").font(.caption.bold()).tracking(2.2).foregroundStyle(FVColor.amber)
           Text(controller.shopperMessage ?? "I couldn’t judge that fruit.").font(.largeTitle.bold())
@@ -48,6 +50,26 @@ struct ResultView: View {
           FVPrimaryButtonStyle(color: color)
         ).padding(.top, 16)
       }.padding(26)
+    }
+  }
+}
+
+private struct VerdictVoiceControl: View {
+  let scan: ScanRecord
+  let controller: ScanController
+  @ObservedObject var speaker: VerdictSpeaker
+  var body: some View {
+    VStack(alignment: .leading, spacing: 8) {
+      Button {
+        if speaker.isLoading || speaker.isPlaying { speaker.stop() }
+        else { Task { await controller.speak(scan) } }
+      } label: {
+        Label(speaker.isLoading ? "Loading Emma" : speaker.isPlaying ? "Stop Emma" : "Hear Emma",
+              systemImage: speaker.isPlaying ? "stop.circle.fill" : "speaker.wave.2.fill")
+      }.foregroundStyle(FVColor.lime).font(.headline)
+      if let message = speaker.message {
+        Text(message).font(.caption).foregroundStyle(FVColor.cream.opacity(0.8))
+      }
     }
   }
 }

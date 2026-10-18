@@ -49,10 +49,11 @@ export function safeError(error: unknown): string {
     "That feedback could not be saved.",
     "That scan could not be deleted.",
     "FreshVision connector is not authorized.",
+    "Emma’s voice is unavailable. Your result is still here.",
   ];
   if (error instanceof Error && allowed.includes(error.message)) {
     return error.message;
   }
-  console.error(error);
+  console.error("FreshVision request failed.");
   return "FreshVision couldn’t finish that scan. Please try again.";
 }

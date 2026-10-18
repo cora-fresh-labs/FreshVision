@@ -62,6 +62,10 @@ targets:
           - UIInterfaceOrientationPortrait
     entitlements:
       path: FreshVisionConsumer/FreshVisionConsumer.entitlements
+    preBuildScripts:
+      - name: Validate beta configuration
+        script: python3 "${SRCROOT}/scripts/validate-beta-config.py"
+        basedOnDependencyAnalysis: false
     dependencies:
       - package: MetaWearablesDAT
         product: MWDATCore

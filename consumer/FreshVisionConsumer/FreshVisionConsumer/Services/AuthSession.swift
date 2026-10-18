@@ -1,7 +1,7 @@
 import Foundation
 import Security
 
-private struct AuthCredentials: Codable, Sendable {
+struct AuthCredentials: Codable, Sendable {
   let accessToken: String
   let refreshToken: String
   let expiresAt: Date
@@ -22,24 +22,34 @@ private struct AuthResponse: Decodable {
 actor AuthSession {
   private let configuration: AppConfiguration
   private let session: URLSession
-  private let store = CredentialStore()
+  private let store: any AuthCredentialStorage
   private var credentials: AuthCredentials?
+  private var pendingToken: Task<String, Error>?
 
-  init(configuration: AppConfiguration, session: URLSession) {
+  init(configuration: AppConfiguration, session: URLSession, store: (any AuthCredentialStorage)? = nil) {
     self.configuration = configuration
     self.session = session
-    credentials = store.load()
+    let credentialStore = store ?? CredentialStore()
+    self.store = credentialStore
+    credentials = credentialStore.load()
   }
 
   func accessToken() async throws -> String {
+    if let pendingToken { return try await pendingToken.value }
+    let task = Task { try await self.currentToken() }
+    pendingToken = task
+    defer { pendingToken = nil }
+    return try await task.value
+  }
+
+  private func currentToken() async throws -> String {
     if let credentials, credentials.expiresAt.timeIntervalSinceNow > 300 {
       return credentials.accessToken
     }
     if let credentials {
-      do { return try await refresh(credentials.refreshToken).accessToken } catch {
-        store.clear()
-        self.credentials = nil
-      }
+      // Preserve ownership on a network or server failure. A new anonymous
+      // identity could no longer sync or delete this installation's scans.
+      return try await refresh(credentials.refreshToken).accessToken
     }
     return try await signInAnonymously().accessToken
   }
@@ -81,7 +91,12 @@ actor AuthSession {
   }
 }
 
-private struct CredentialStore: Sendable {
+protocol AuthCredentialStorage: Sendable {
+  func load() -> AuthCredentials?
+  func save(_ credentials: AuthCredentials) throws
+}
+
+private struct CredentialStore: AuthCredentialStorage {
   private let service = "com.coraglobalprojects.freshvision.consumer.auth"
   private let account = "anonymous-session"
 

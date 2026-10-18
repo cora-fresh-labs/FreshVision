@@ -71,7 +71,7 @@ export async function analyzeFruit(
   }
 
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 4_200);
+  const timeout = setTimeout(() => controller.abort(), 12_000);
   try {
     const response = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",

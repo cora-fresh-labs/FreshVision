@@ -20,7 +20,7 @@ Deno.serve(async (request) => {
   }
   try {
     const caller = await requireCaller(request);
-    await enforceRateLimit(request, caller.userId, "analyze", 20, 60, 500);
+    await enforceRateLimit(request, caller.userId, "analyze", 20, 40, 50);
     const body = await readJson<RequestBody>(request);
     if (!body.scanId || !body.imageBase64) {
       return json({ error: "Take another photo and try again." }, 400);

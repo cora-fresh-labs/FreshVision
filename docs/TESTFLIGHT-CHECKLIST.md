@@ -13,14 +13,17 @@
 - [x] Edge Functions enforce ownership and daily user and network rate limits.
 - [ ] Apply the private Supabase migration.
 - [ ] Set the server-side Anthropic model and API secret.
-- [ ] Deploy and smoke-test the five Edge Functions.
+- [ ] Deploy and smoke-test the four consumer data functions and `speak-verdict`.
+- [ ] Set the server-only ElevenLabs key and verify live Emma audio.
+- [ ] Keep the optional Meta connector undeployed until its separate setup is approved.
 - [ ] Add the Supabase client configuration to the private Xcode configuration.
 
 ## Meta glasses
 
 - [x] DAT camera preview and photo capture compile against 1.0.0.
 - [x] Glasses capture-button input is wired to the scan pipeline.
-- [x] A glasses scan speaks the fixed verdict and reason.
+- [x] The native audio path plays backend MP3 data, verified with a synthetic tone fixture.
+- [ ] Verify Emma generation and playback through the deployed backend on an iPhone.
 - [ ] Create the app in Wearables Developer Center.
 - [ ] Add Meta app credentials to the private Xcode configuration.
 - [ ] Run the Mock Device Kit camera and capture-button test.

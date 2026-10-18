@@ -1,6 +1,7 @@
 # Xcode
 DerivedData/
 build/
+node_modules/
 *.xcuserstate
 *.xcworkspace/xcuserdata/
 *.xcodeproj/xcuserdata/

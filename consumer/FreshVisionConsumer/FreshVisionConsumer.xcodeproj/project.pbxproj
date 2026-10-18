@@ -20,6 +20,8 @@
 		6F4DF72D46DCD7D59E6FFD64 /* AppConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE42619655A096B694A8DC4 /* AppConfiguration.swift */; };
 		77D12F5E7C1ABD35C80AD9EC /* ImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712078B7EB8060A16AD3973D /* ImageStore.swift */; };
 		921507D876B274278A69105B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AC3E2DF2B5A3D80C4D094E93 /* Assets.xcassets */; };
+		955E5B1CA00F1D869455F3E4 /* BetaFlowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40502BC4164743BCB96B7FC2 /* BetaFlowTests.swift */; };
+		9B2CC94E52F47FDF44F927E6 /* playback-tone.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4ABBE4ECE281E1F170D6E93B /* playback-tone.mp3 */; };
 		A15224FC0155FCEAABBB1A10 /* IPhoneCameraSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE67CD20F668B68B8D26D056 /* IPhoneCameraSource.swift */; };
 		A21F2EAD2C9F69B3CD28027C /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E644345DC544E89C68855B53 /* RootView.swift */; };
 		A67422D32899F780564B4246 /* MetaGlassesSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D63C4B51757B9319AE0D2CD /* MetaGlassesSource.swift */; };
@@ -50,10 +52,12 @@
 		38CFD2DD79CBCB961FEA6BD8 /* FreshVisionConsumerTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = FreshVisionConsumerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A06CC6816CF347011B4B18E /* ScanRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanRecord.swift; sourceTree = "<group>"; };
 		3CFF918854C6CCFE062551A5 /* FruitModelsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FruitModelsTests.swift; sourceTree = "<group>"; };
+		40502BC4164743BCB96B7FC2 /* BetaFlowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BetaFlowTests.swift; sourceTree = "<group>"; };
 		408B0CCD87FDC274E177DD58 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		441894B86EB16717BCD1756F /* FreshVisionConsumerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreshVisionConsumerApp.swift; sourceTree = "<group>"; };
 		449438D872018DC5D1E1B470 /* GlassesSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassesSheet.swift; sourceTree = "<group>"; };
 		473E8D7968A7731E00DA59E7 /* MetaRuntime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaRuntime.swift; sourceTree = "<group>"; };
+		4ABBE4ECE281E1F170D6E93B /* playback-tone.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "playback-tone.mp3"; sourceTree = "<group>"; };
 		4AE41A4338FFD7D0A162CDA9 /* ScanController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanController.swift; sourceTree = "<group>"; };
 		4F0FF03B9393E637D3FF307F /* ResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultView.swift; sourceTree = "<group>"; };
 		712078B7EB8060A16AD3973D /* ImageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageStore.swift; sourceTree = "<group>"; };
@@ -105,7 +109,9 @@
 		082760934F2FFC7E73881391 /* FreshVisionConsumerTests */ = {
 			isa = PBXGroup;
 			children = (
+				40502BC4164743BCB96B7FC2 /* BetaFlowTests.swift */,
 				3CFF918854C6CCFE062551A5 /* FruitModelsTests.swift */,
+				77BB7B792C40CB0259A01382 /* Fixtures */,
 			);
 			path = FreshVisionConsumerTests;
 			sourceTree = "<group>";
@@ -178,6 +184,14 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		77BB7B792C40CB0259A01382 /* Fixtures */ = {
+			isa = PBXGroup;
+			children = (
+				4ABBE4ECE281E1F170D6E93B /* playback-tone.mp3 */,
+			);
+			path = Fixtures;
+			sourceTree = "<group>";
+		};
 		920B19226E89A14A8434001F /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -213,6 +227,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7ECB2A10D13F09B1EBCAA10C /* Build configuration list for PBXNativeTarget "FreshVisionConsumer" */;
 			buildPhases = (
+				40E201BDC767095783C38A57 /* Validate beta configuration */,
 				C1FB47765E4972A744D14F6C /* Sources */,
 				C397E40D1A6B9AF4623791B6 /* Resources */,
 				912CEC155392F346C4C1E4E6 /* Frameworks */,
@@ -236,6 +251,7 @@
 			buildConfigurationList = 0F829DEFB7B876F2F05BFC89 /* Build configuration list for PBXNativeTarget "FreshVisionConsumerTests" */;
 			buildPhases = (
 				464F525861F12319541C05EF /* Sources */,
+				DABDCF84B81983C61F218A17 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -300,13 +316,44 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		DABDCF84B81983C61F218A17 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9B2CC94E52F47FDF44F927E6 /* playback-tone.mp3 in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		40E201BDC767095783C38A57 /* Validate beta configuration */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Validate beta configuration";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "python3 \"${SRCROOT}/scripts/validate-beta-config.py\"";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		464F525861F12319541C05EF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				955E5B1CA00F1D869455F3E4 /* BetaFlowTests.swift in Sources */,
 				4BDDF448CAB54D7B7DAE1D91 /* FruitModelsTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

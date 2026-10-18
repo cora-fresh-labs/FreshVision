@@ -51,16 +51,20 @@ actor FreshVisionAPI {
   private let configuration: AppConfiguration
   private let session: URLSession
   private let auth: AuthSession
+  private let tokenProvider: (@Sendable () async throws -> String)?
   private let encoder = JSONEncoder()
   private let decoder = JSONDecoder()
 
-  init(configuration: AppConfiguration = .live) {
+  init(configuration: AppConfiguration = .live, session: URLSession? = nil,
+       tokenProvider: (@Sendable () async throws -> String)? = nil) {
     self.configuration = configuration
     let config = URLSessionConfiguration.ephemeral
-    config.timeoutIntervalForRequest = 4.5
-    config.timeoutIntervalForResource = 5
-    session = URLSession(configuration: config)
-    auth = AuthSession(configuration: configuration, session: session)
+    config.timeoutIntervalForRequest = 15
+    config.timeoutIntervalForResource = 20
+    let transport = session ?? URLSession(configuration: config)
+    self.session = transport
+    self.tokenProvider = tokenProvider
+    auth = AuthSession(configuration: configuration, session: transport)
     encoder.dateEncodingStrategy = .iso8601
     decoder.dateDecodingStrategy = .iso8601
   }
@@ -97,6 +101,19 @@ actor FreshVisionAPI {
     let _: EmptyResponse = try await post("delete-consumer-scan", Payload(scanId: id))
   }
 
+  func verdictAudio(scanID: UUID) async throws -> Data {
+    struct Payload: Encodable { let scanId: UUID }
+    struct Audio: Decodable {
+      let voiceId, contentType, audioBase64: String
+    }
+    let audio: Audio = try await post("speak-verdict", Payload(scanId: scanID))
+    guard audio.voiceId == "56bWURjYFHyYyVf490Dp", audio.contentType == "audio/mpeg",
+      audio.audioBase64.count <= 1_400_000,
+      let data = Data(base64Encoded: audio.audioBase64), !data.isEmpty
+    else { throw FreshVisionAPIError.invalidResponse }
+    return data
+  }
+
   private func post<P: Encodable, R: Decodable>(_ function: String, _ payload: P) async throws -> R
   {
     guard configuration.isConfigured, let url = configuration.functionURL(function) else {
@@ -107,7 +124,10 @@ actor FreshVisionAPI {
     request.httpBody = try encoder.encode(payload)
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
     request.setValue(configuration.supabaseAnonKey, forHTTPHeaderField: "apikey")
-    request.setValue("Bearer \(try await auth.accessToken())", forHTTPHeaderField: "Authorization")
+    let token: String
+    if let tokenProvider { token = try await tokenProvider() }
+    else { token = try await auth.accessToken() }
+    request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
     do {
       let (data, response) = try await session.data(for: request)
       guard let http = response as? HTTPURLResponse else {
@@ -118,9 +138,15 @@ actor FreshVisionAPI {
           (try? decoder.decode(APIErrorBody.self, from: data).error)
             ?? "FreshVision couldn’t finish that scan.")
       }
-      return try decoder.decode(R.self, from: data.isEmpty ? Data("{}".utf8) : data)
+      guard let value = try? decoder.decode(R.self, from: data.isEmpty ? Data("{}".utf8) : data) else {
+        throw FreshVisionAPIError.invalidResponse
+      }
+      return value
     } catch let error as URLError where error.code == .timedOut {
       throw FreshVisionAPIError.timedOut
+    } catch let error as URLError where error.code == .notConnectedToInternet
+      || error.code == .networkConnectionLost || error.code == .cannotConnectToHost {
+      throw FreshVisionAPIError.serverMessage("You’re offline. Your photo is saved. Try again when connected.")
     }
   }
 }

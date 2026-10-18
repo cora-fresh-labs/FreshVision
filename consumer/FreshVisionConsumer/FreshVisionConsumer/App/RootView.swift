@@ -1,5 +1,6 @@
 import SwiftData
 import SwiftUI
+import PhotosUI
 
 struct RootView: View {
   @Environment(\.modelContext) private var context
@@ -9,6 +10,7 @@ struct RootView: View {
   @StateObject private var controller = ScanController()
   @State private var showHistory = false
   @State private var showGlasses = false
+  @State private var selectedPhoto: PhotosPickerItem?
 
   var body: some View {
     ZStack {
@@ -21,9 +23,10 @@ struct RootView: View {
       CameraChrome(
         controller: controller,
         capture: { Task { await controller.scan(using: phone, glasses: glasses) } },
-        history: { showHistory = true }, glasses: { showGlasses = true })
-      if phone.permissionDenied && controller.selectedSource == .iPhone {
-        CameraPermissionOverlay()
+        history: { showHistory = true }, glasses: { showGlasses = true }, selectedPhoto: $selectedPhoto)
+      if (phone.permissionDenied || phone.cameraUnavailable) && controller.selectedSource == .iPhone {
+        CameraPermissionOverlay(selectedPhoto: $selectedPhoto, unavailable: phone.cameraUnavailable,
+                                history: { showHistory = true })
       }
       if controller.phase == .capturing || controller.phase == .analyzing {
         WorkingOverlay(phase: controller.phase)
@@ -47,8 +50,21 @@ struct RootView: View {
           }
         }
       } else {
+        controller.speaker.stop()
         phone.stop()
         glasses.stop()
+      }
+    }
+    .onChange(of: selectedPhoto) { _, item in
+      guard let item else { return }
+      Task {
+        defer { selectedPhoto = nil }
+        do {
+          guard let data = try await item.loadTransferable(type: Data.self) else {
+            throw CaptureError.noImageData
+          }
+          await controller.importPhoto(data)
+        } catch { controller.shopperMessage = "That photo could not be opened. Choose another photo." }
       }
     }
     .onChange(of: controller.selectedSource) { _, source in
@@ -104,6 +120,7 @@ struct RootView: View {
 private struct CameraChrome: View {
   @ObservedObject var controller: ScanController
   let capture, history, glasses: () -> Void
+  @Binding var selectedPhoto: PhotosPickerItem?
   var body: some View {
     VStack {
       HStack {
@@ -141,6 +158,9 @@ private struct CameraChrome: View {
             .title2
           ).frame(width: 70, height: 48)
         }
+        PhotosPicker(selection: $selectedPhoto, matching: .images) {
+          Image(systemName: "photo.on.rectangle").font(.title2).frame(width: 44, height: 48)
+        }.accessibilityLabel("Choose a fruit photo")
         Spacer()
         Button(action: capture) {
           ZStack {
@@ -183,21 +203,29 @@ private struct WorkingOverlay: View {
 }
 
 private struct CameraPermissionOverlay: View {
+  @Binding var selectedPhoto: PhotosPickerItem?
+  let unavailable: Bool
+  let history: () -> Void
   var body: some View {
     ZStack {
       FVColor.ink.opacity(0.96).ignoresSafeArea()
       VStack(spacing: 18) {
         Image(systemName: "camera.fill").font(.system(size: 42, weight: .bold)).foregroundStyle(
           FVColor.lime)
-        Text("Turn on camera access").font(.system(size: 32, weight: .black, design: .rounded))
+        Text(unavailable ? "Choose a fruit photo" : "Turn on camera access").font(.system(size: 32, weight: .black, design: .rounded))
           .foregroundStyle(FVColor.cream)
         Text(
-          "FreshVision needs the camera to check fruit. Allow Camera in Settings, then come back here."
+          unavailable ? "The camera is unavailable on this device. You can check a fruit photo from your library."
+            : "Allow Camera in Settings, or choose a fruit photo from your library."
         ).font(.title3).multilineTextAlignment(.center).foregroundStyle(FVColor.cream.opacity(0.82))
-        Button("Open Settings") {
+        if !unavailable { Button("Open Settings") {
           guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
           UIApplication.shared.open(url)
-        }.buttonStyle(FVPrimaryButtonStyle(color: FVColor.lime))
+        }.buttonStyle(FVPrimaryButtonStyle(color: FVColor.lime)) }
+        PhotosPicker(selection: $selectedPhoto, matching: .images) {
+          Label("Choose a fruit photo", systemImage: "photo.on.rectangle")
+        }.buttonStyle(FVPrimaryButtonStyle(color: FVColor.cream))
+        Button("View history", action: history).foregroundStyle(FVColor.cream).font(.headline)
       }.padding(28)
     }
   }

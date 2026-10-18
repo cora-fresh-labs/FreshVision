@@ -6,6 +6,7 @@ final class IPhoneCameraSource: NSObject, ObservableObject {
   private let pipeline = CameraPipeline()
   var session: AVCaptureSession { pipeline.session }
   @Published private(set) var permissionDenied = false
+  @Published private(set) var cameraUnavailable = false
   @Published private(set) var isReady = false
   private var continuation: CheckedContinuation<CapturedFruitImage, Error>?
 
@@ -59,21 +60,22 @@ final class IPhoneCameraSource: NSObject, ObservableObject {
       guard let self else { return }
       pipeline.session.beginConfiguration()
       pipeline.session.sessionPreset = .photo
-      defer { pipeline.session.commitConfiguration() }
       guard
         let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back),
         let input = try? AVCaptureDeviceInput(device: device),
         pipeline.session.canAddInput(input),
         pipeline.session.canAddOutput(pipeline.output)
       else {
-        Task { @MainActor in self.permissionDenied = true }
+        pipeline.session.commitConfiguration()
+        Task { @MainActor in self.cameraUnavailable = true }
         return
       }
       pipeline.session.addInput(input)
       pipeline.session.addOutput(pipeline.output)
       pipeline.output.maxPhotoQualityPrioritization = .quality
+      pipeline.session.commitConfiguration()
       pipeline.session.startRunning()
-      Task { @MainActor in self.isReady = true }
+      Task { @MainActor in self.cameraUnavailable = false; self.isReady = true }
     }
   }
 }
