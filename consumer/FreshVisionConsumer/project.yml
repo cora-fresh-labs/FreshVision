@@ -1,0 +1,102 @@
+name: FreshVisionConsumer
+options:
+  bundleIdPrefix: com.coraglobalprojects
+  deploymentTarget:
+    iOS: "17.2"
+  xcodeVersion: "26.2"
+  createIntermediateGroups: true
+packages:
+  MetaWearablesDAT:
+    url: https://github.com/facebook/meta-wearables-dat-ios
+    exactVersion: 1.0.0
+settings:
+  base:
+    SWIFT_VERSION: 6.0
+    MARKETING_VERSION: 1.0.0
+    CURRENT_PROJECT_VERSION: 1
+    DEVELOPMENT_TEAM: WY253UX7FC
+    CODE_SIGN_STYLE: Automatic
+    GENERATE_INFOPLIST_FILE: NO
+targets:
+  FreshVisionConsumer:
+    type: application
+    platform: iOS
+    configFiles:
+      Debug: Config/Defaults.xcconfig
+      Release: Config/Defaults.xcconfig
+    sources:
+      - path: FreshVisionConsumer
+    resources:
+      - path: FreshVisionConsumer/Resources
+    info:
+      path: FreshVisionConsumer/Info.plist
+      properties:
+        CFBundleDisplayName: FreshVision
+        CFBundleURLTypes:
+          - CFBundleTypeRole: Editor
+            CFBundleURLName: $(PRODUCT_BUNDLE_IDENTIFIER)
+            CFBundleURLSchemes:
+              - freshvisionconsumer
+        MWDAT:
+          Analytics:
+            OptOut: true
+          AppLinkURLScheme: freshvisionconsumer://
+          ClientToken: $(META_CLIENT_TOKEN)
+          CrashReporting:
+            OptOut: true
+          MetaAppID: $(META_APP_ID)
+          TeamID: $(DEVELOPMENT_TEAM)
+        NSBluetoothAlwaysUsageDescription: FreshVision uses Bluetooth to connect to your Meta glasses.
+        NSCameraUsageDescription: FreshVision uses the camera to tell you whether fruit is worth buying.
+        NSMicrophoneUsageDescription: FreshVision uses the microphone when you start a scan from Meta glasses.
+        SUPABASE_ANON_KEY: $(SUPABASE_ANON_KEY)
+        SUPABASE_URL: $(SUPABASE_URL)
+        UIBackgroundModes:
+          - bluetooth-peripheral
+          - external-accessory
+        UILaunchScreen:
+          UIColorName: LaunchBackground
+        UISupportedExternalAccessoryProtocols:
+          - com.meta.ar.wearable
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+    entitlements:
+      path: FreshVisionConsumer/FreshVisionConsumer.entitlements
+    preBuildScripts:
+      - name: Validate beta configuration
+        script: python3 "${SRCROOT}/scripts/validate-beta-config.py"
+        basedOnDependencyAnalysis: false
+    dependencies:
+      - package: MetaWearablesDAT
+        product: MWDATCore
+      - package: MetaWearablesDAT
+        product: MWDATCamera
+      - package: MetaWearablesDAT
+        product: MWDATInputs
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.coraglobalprojects.freshvision.consumer
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        INFOPLIST_KEY_CFBundleDisplayName: FreshVision
+        TARGETED_DEVICE_FAMILY: "1"
+        SUPPORTS_MACCATALYST: NO
+  FreshVisionConsumerTests:
+    type: bundle.unit-test
+    platform: iOS
+    hostApplication: FreshVisionConsumer
+    sources:
+      - path: FreshVisionConsumerTests
+    dependencies:
+      - target: FreshVisionConsumer
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.coraglobalprojects.freshvision.consumer.tests
+schemes:
+  FreshVisionConsumer:
+    build:
+      targets:
+        FreshVisionConsumer: all
+        FreshVisionConsumerTests: [test]
+    test:
+      targets:
+        - FreshVisionConsumerTests

@@ -14,9 +14,12 @@
 // video frame handling, photo capture, and error handling.
 //
 
+import AVFoundation
+import MediaPlayer
 import MWDATCamera
 import MWDATCore
 import SwiftUI
+import UIKit
 
 enum StreamingStatus {
   case streaming
@@ -27,6 +30,11 @@ enum StreamingStatus {
 enum StreamingMode {
   case glasses
   case iPhone
+}
+
+struct CapturedPhotoQueueItem {
+  let id: UUID
+  let image: UIImage
 }
 
 @MainActor
@@ -45,10 +53,14 @@ class StreamSessionViewModel: ObservableObject {
 
   // Photo capture properties
   @Published var capturedPhoto: UIImage?
+  @Published var capturedPhotos: [CapturedPhotoQueueItem] = []
   @Published var showPhotoPreview: Bool = false
 
-  // Gemini Live integration
+  // Gemini Live integration (stub — kept for compatibility)
   var geminiSessionVM: GeminiSessionViewModel?
+
+  // FreshVision (Claude) integration
+  var freshVisionVM: FreshVisionViewModel?
 
   // The core DAT SDK StreamSession - handles all streaming operations
   private var streamSession: StreamSession
@@ -62,13 +74,17 @@ class StreamSessionViewModel: ObservableObject {
   private var deviceMonitorTask: Task<Void, Never>?
   private var iPhoneCameraManager: IPhoneCameraManager?
 
+  // Volume button capture: press volume up/down to snap a photo hands-free
+  private var volumeObserver: NSKeyValueObservation?
+  private var lastVolumeCapture: Date = .distantPast
+
   init(wearables: WearablesInterface) {
     self.wearables = wearables
     // Let the SDK auto-select from available devices
     self.deviceSelector = AutoDeviceSelector(wearables: wearables)
     let config = StreamSessionConfig(
       videoCodec: VideoCodec.raw,
-      resolution: StreamingResolution.low,
+      resolution: StreamingResolution.high,
       frameRate: 24)
     streamSession = StreamSession(streamSessionConfig: config, deviceSelector: deviceSelector)
 
@@ -98,8 +114,8 @@ class StreamSessionViewModel: ObservableObject {
           if !self.hasReceivedFirstFrame {
             self.hasReceivedFirstFrame = true
           }
-          // Forward video frames to Gemini Live (throttled internally to ~1fps)
-          self.geminiSessionVM?.sendVideoFrameIfThrottled(image: image)
+          // Forward latest frame to FreshVision for tap-to-inspect
+          self.freshVisionVM?.updateLatestFrame(image)
         }
       }
     }
@@ -124,8 +140,17 @@ class StreamSessionViewModel: ObservableObject {
       Task { @MainActor [weak self] in
         guard let self else { return }
         if let uiImage = UIImage(data: photoData.data) {
-          self.capturedPhoto = uiImage
-          self.showPhotoPreview = true
+          let optimized = self.optimizeForQueue(uiImage)
+          self.capturedPhoto = optimized
+          let item = CapturedPhotoQueueItem(id: UUID(), image: optimized)
+          self.capturedPhotos.append(item)
+          if self.capturedPhotos.count > 20 {
+            self.capturedPhotos.removeFirst(self.capturedPhotos.count - 20)
+          }
+          self.freshVisionVM?.registerCapturedPhoto(optimized, id: item.id)
+          self.freshVisionVM?.addBatchPhoto(optimized)
+          // Keep the flow uninterrupted during inspections (no modal preview spam)
+          self.showPhotoPreview = false
         }
       }
     }
@@ -152,6 +177,51 @@ class StreamSessionViewModel: ObservableObject {
 
   func startSession() async {
     await streamSession.start()
+    startVolumeButtonCapture()
+  }
+
+  // MARK: - Volume Button Capture (hands-free photo trigger)
+
+  /// Listen for volume button presses to trigger photo capture.
+  /// This lets the user snap photos while wearing glasses without touching the screen.
+  /// Uses AVAudioSession outputVolume KVO — works even when phone is in pocket.
+  private func startVolumeButtonCapture() {
+    // Set up audio session to observe volume changes
+    let audioSession = AVAudioSession.sharedInstance()
+    do {
+      try audioSession.setActive(true)
+    } catch {
+      NSLog("[Stream] Volume button capture setup failed: %@", error.localizedDescription)
+      return
+    }
+
+    // Hide the system volume HUD by adding an invisible MPVolumeView
+    // (the parent view should add this — but the KVO approach still works)
+
+    volumeObserver = audioSession.observe(\.outputVolume, options: [.new, .old]) { [weak self] _, change in
+      Task { @MainActor [weak self] in
+        guard let self else { return }
+        guard self.streamingStatus == .streaming else { return }
+
+        // Debounce: ignore presses within 0.5 seconds of each other
+        let now = Date()
+        guard now.timeIntervalSince(self.lastVolumeCapture) > 0.5 else { return }
+
+        // Only trigger if volume actually changed (not initial observation)
+        guard let oldVal = change.oldValue, let newVal = change.newValue, oldVal != newVal else { return }
+
+        self.lastVolumeCapture = now
+        self.capturePhoto()
+        NSLog("[Stream] Volume button photo captured (vol: %.2f → %.2f)", oldVal, newVal)
+      }
+    }
+
+    NSLog("[Stream] Volume button capture enabled — press volume up/down to snap photos")
+  }
+
+  private func stopVolumeButtonCapture() {
+    volumeObserver?.invalidate()
+    volumeObserver = nil
   }
 
   private func showError(_ message: String) {
@@ -164,6 +234,7 @@ class StreamSessionViewModel: ObservableObject {
       stopIPhoneSession()
       return
     }
+    stopVolumeButtonCapture()
     await streamSession.stop()
   }
 
@@ -188,12 +259,14 @@ class StreamSessionViewModel: ObservableObject {
         if !self.hasReceivedFirstFrame {
           self.hasReceivedFirstFrame = true
         }
-        self.geminiSessionVM?.sendVideoFrameIfThrottled(image: image)
+        // Forward latest frame to FreshVision for tap-to-inspect
+        self.freshVisionVM?.updateLatestFrame(image)
       }
     }
     camera.start()
     iPhoneCameraManager = camera
     streamingStatus = .streaming
+    startVolumeButtonCapture()
     NSLog("[Stream] iPhone camera mode started")
   }
 
@@ -204,6 +277,7 @@ class StreamSessionViewModel: ObservableObject {
     hasReceivedFirstFrame = false
     streamingStatus = .stopped
     streamingMode = .glasses
+    stopVolumeButtonCapture()
     NSLog("[Stream] iPhone camera mode stopped")
   }
 
@@ -213,12 +287,55 @@ class StreamSessionViewModel: ObservableObject {
   }
 
   func capturePhoto() {
+    if streamingMode == .iPhone {
+      guard let frame = currentVideoFrame else {
+        showError("No camera frame available to capture.")
+        return
+      }
+      let optimized = optimizeForQueue(frame)
+      capturedPhoto = optimized
+      let item = CapturedPhotoQueueItem(id: UUID(), image: optimized)
+      capturedPhotos.append(item)
+      if capturedPhotos.count > 20 {
+        capturedPhotos.removeFirst(capturedPhotos.count - 20)
+      }
+      freshVisionVM?.registerCapturedPhoto(optimized, id: item.id)
+      freshVisionVM?.addBatchPhoto(optimized)
+      showPhotoPreview = false
+      return
+    }
+
     streamSession.capturePhoto(format: .jpeg)
+  }
+
+  private func optimizeForQueue(_ image: UIImage) -> UIImage {
+    let maxDimension: CGFloat = 1440
+    let size = image.size
+    let largest = max(size.width, size.height)
+    guard largest > maxDimension else { return image }
+
+    let scale = maxDimension / largest
+    let newSize = CGSize(width: size.width * scale, height: size.height * scale)
+    let renderer = UIGraphicsImageRenderer(size: newSize)
+    return renderer.image { _ in
+      image.draw(in: CGRect(origin: .zero, size: newSize))
+    }
+  }
+
+  func dequeueCapturedPhoto() -> CapturedPhotoQueueItem? {
+    guard !capturedPhotos.isEmpty else { return nil }
+    return capturedPhotos.removeFirst()
   }
 
   func dismissPhotoPreview() {
     showPhotoPreview = false
     capturedPhoto = nil
+  }
+
+  func clearCapturedPhotos() {
+    capturedPhotos.removeAll()
+    capturedPhoto = nil
+    showPhotoPreview = false
   }
 
   private func updateStatusFromState(_ state: StreamSessionState) {

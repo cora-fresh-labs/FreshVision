@@ -1,0 +1,7 @@
+{
+  "nodeModulesDir": "auto",
+  "tasks": {
+    "test": "deno test --allow-env supabase/functions/_shared/analysis_test.ts supabase/functions/_shared/speech_test.ts",
+    "check": "deno check supabase/functions/analyze-fruit/index.ts supabase/functions/save-consumer-scan/index.ts supabase/functions/save-consumer-feedback/index.ts supabase/functions/delete-consumer-scan/index.ts supabase/functions/meta-ai-freshvision/index.ts supabase/functions/speak-verdict/index.ts"
+  }
+}

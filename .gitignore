@@ -1,0 +1,24 @@
+# Xcode
+DerivedData/
+build/
+node_modules/
+*.xcuserstate
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+
+# Local secrets / env
+.env
+.env.*
+*.local
+*.secret
+Secrets.plist
+Config.local.swift
+
+# macOS
+.DS_Store
+# FreshVision Consumer local build files
+consumer/FreshVisionConsumer/Config/Secrets.xcconfig
+consumer/FreshVisionConsumer/FreshVisionConsumer.xcodeproj/xcuserdata/
+consumer/FreshVisionConsumer/DerivedData/
+consumer/FreshVisionConsumer/build/
+supabase/.temp/
