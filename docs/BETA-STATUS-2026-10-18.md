@@ -18,6 +18,11 @@ Functions type-check. Release configuration rejection passed for empty, insecure
 and server-key inputs; a public-key fixture passed. A source pattern scan found
 no provider keys or private keys.
 
+An unsigned Debug build for `generic/platform=iOS` also passed. It confirms device
+compilation only; it is not a signed archive, installed iPhone test or TestFlight
+upload. The reviewable implementation is in draft
+[PR #2](https://github.com/cora-fresh-labs/FreshVision/pull/2).
+
 The actual app was opened, camera permission was denied, and the photo picker
 imported the repository's demo image. The app correctly displayed
 `FreshVision is not connected yet.` The local scan was retained. These checks
